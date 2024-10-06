@@ -1,0 +1,16 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/rafayelghazaryan/Projects/vienna42/test/ft_printf/test'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _ft_print_hex, symObjAddr: 0x0, symBinAddr: 0x1000034A8, symSize: 0x13C }
+  - { offsetInCU: 0x48, offset: 0x48, size: 0x8, addend: 0x0, symName: _ft_print_hex, symObjAddr: 0x0, symBinAddr: 0x1000034A8, symSize: 0x13C }
+  - { offsetInCU: 0xA8, offset: 0xA8, size: 0x8, addend: 0x0, symName: _ft_print_i_d, symObjAddr: 0x13C, symBinAddr: 0x1000035E4, symSize: 0x130 }
+  - { offsetInCU: 0xFA, offset: 0xFA, size: 0x8, addend: 0x0, symName: _ft_print_u, symObjAddr: 0x26C, symBinAddr: 0x100003714, symSize: 0x9C }
+  - { offsetInCU: 0x13E, offset: 0x13E, size: 0x8, addend: 0x0, symName: _ft_print_adress, symObjAddr: 0x308, symBinAddr: 0x1000037B0, symSize: 0x94 }
+  - { offsetInCU: 0x174, offset: 0x174, size: 0x8, addend: 0x0, symName: _ft_print_pnter, symObjAddr: 0x39C, symBinAddr: 0x100003844, symSize: 0xC4 }
+  - { offsetInCU: 0x1C6, offset: 0x1C6, size: 0x8, addend: 0x0, symName: _ft_printf, symObjAddr: 0x460, symBinAddr: 0x100003908, symSize: 0x154 }
+  - { offsetInCU: 0x235, offset: 0x235, size: 0x8, addend: 0x0, symName: _ft_format, symObjAddr: 0x5B4, symBinAddr: 0x100003A5C, symSize: 0x118 }
+  - { offsetInCU: 0x287, offset: 0x287, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x6CC, symBinAddr: 0x100003B74, symSize: 0xE8 }
+  - { offsetInCU: 0x2AF, offset: 0x2AF, size: 0x8, addend: 0x0, symName: _ft_printf_decide, symObjAddr: 0x7B4, symBinAddr: 0x100003C5C, symSize: 0x1D0 }
+  - { offsetInCU: 0x2F3, offset: 0x2F3, size: 0x8, addend: 0x0, symName: _ft_print_str, symObjAddr: 0x984, symBinAddr: 0x100003E2C, symSize: 0xA8 }
+...
