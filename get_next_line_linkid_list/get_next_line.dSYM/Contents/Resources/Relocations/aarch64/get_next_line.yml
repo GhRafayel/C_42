@@ -1,0 +1,16 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/rafayelghazaryan/Desktop/C_42/get_next_line_linkid_list/get_next_line'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _ft_strlen, symObjAddr: 0x0, symBinAddr: 0x1000036AC, symSize: 0x50 }
+  - { offsetInCU: 0x41, offset: 0x41, size: 0x8, addend: 0x0, symName: _get_next_line, symObjAddr: 0x734, symBinAddr: 0x100003DE0, symSize: 0xE0 }
+  - { offsetInCU: 0x66, offset: 0x66, size: 0x8, addend: 0x0, symName: _get_next_line.static_obj, symObjAddr: 0x1A28, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0xE3, offset: 0xE3, size: 0x8, addend: 0x0, symName: _ft_strlen, symObjAddr: 0x0, symBinAddr: 0x1000036AC, symSize: 0x50 }
+  - { offsetInCU: 0x119, offset: 0x119, size: 0x8, addend: 0x0, symName: _ft_strdup, symObjAddr: 0x50, symBinAddr: 0x1000036FC, symSize: 0xB8 }
+  - { offsetInCU: 0x15D, offset: 0x15D, size: 0x8, addend: 0x0, symName: _ft_strjoin, symObjAddr: 0x108, symBinAddr: 0x1000037B4, symSize: 0x114 }
+  - { offsetInCU: 0x1BD, offset: 0x1BD, size: 0x8, addend: 0x0, symName: _ft_substr, symObjAddr: 0x21C, symBinAddr: 0x1000038C8, symSize: 0x194 }
+  - { offsetInCU: 0x22B, offset: 0x22B, size: 0x8, addend: 0x0, symName: _ft_join, symObjAddr: 0x3B0, symBinAddr: 0x100003A5C, symSize: 0x80 }
+  - { offsetInCU: 0x26F, offset: 0x26F, size: 0x8, addend: 0x0, symName: _ft_read, symObjAddr: 0x430, symBinAddr: 0x100003ADC, symSize: 0x178 }
+  - { offsetInCU: 0x2DD, offset: 0x2DD, size: 0x8, addend: 0x0, symName: _ft_control, symObjAddr: 0x5A8, symBinAddr: 0x100003C54, symSize: 0x18C }
+  - { offsetInCU: 0x32F, offset: 0x32F, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x814, symBinAddr: 0x100003EC0, symSize: 0x88 }
+...
