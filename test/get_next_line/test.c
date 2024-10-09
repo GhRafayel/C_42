@@ -13,7 +13,7 @@
 #include <string.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 3
 # endif
 
 size_t ft_strlen(const char *s)
@@ -96,6 +96,7 @@ char *ft_substr(const char *s, unsigned start, size_t len)
     new_str[i] = '\0';
     return (new_str);
 }
+/*
 size_t ft_read(int fd, char *str, size_t buffer_size)
 {
     size_t readed;
@@ -104,7 +105,8 @@ size_t ft_read(int fd, char *str, size_t buffer_size)
     return (readed);
 }
 
-/*
+/////////////////////////////////////////////////////////////////////////////////////////
+
 char	*get_next_line(int fd)
 {
     static char	*stat_string;
@@ -179,7 +181,8 @@ int main() {
     close(fd);
     return (0);
 }
-*/
+//////////////////////////////////////////////////////////////////////////////////////////
+
 char	*ft_free(char *pnt)
 {
 	free(pnt);
@@ -283,4 +286,137 @@ int main() {
 
     close(fd);
     return (0);
+}
+*/
+
+ssize_t	ft_join(char *readed_str, char **result)
+{
+	char	*ss;
+	int		i;
+
+	i = 0;
+	if (*result == NULL)
+	{
+		*result = ft_strdup(readed_str); // Նոր ալոկացիա հիշողության
+		if (*result == NULL)
+			return (-1); // Ալոկացման ձախողման դեպքում
+	}
+	else
+	{
+		ss = *result;
+		*result = ft_strjoin(ss, readed_str); // Նոր հիշողություն
+		free(ss); // Ազատում ես նախկին *result-ը
+		if (*result == NULL)
+			return (-1); // Ալոկացման ձախողման դեպքում
+	}
+	while ((*result)[i] != '\0') // (*result)[i]
+	{
+		if ((*result)[i] == '\n')
+		{
+			return (0); // '\n' գտնված է
+		}
+		i++;
+	}
+	return (1); // '\n' չի գտնվել
+}
+
+
+char	*ft_control(char **static_str, char *new_str)
+{
+	char	*result;
+	int		i;
+
+	i = 0;
+	if (*static_str != NULL)
+	{
+		result = ft_strjoin(*static_str, new_str);
+		*static_str = result;
+	}
+	else
+	{
+		result = ft_strdup(new_str);
+	}	
+	while (result[i])
+	{
+		if (result[i] == '\n' && result[i + 1] != '\0')
+		{
+			*static_str = ft_substr(result, i + 1, ft_strlen(result));
+		 	result = ft_substr(result, 0, i + 1);
+		 	free(new_str);
+			break;
+		}
+		i++;
+	}
+	return (result);
+}
+
+char	*ft_read(int fd)
+{
+	ssize_t	readed;
+	char	*readed_str;
+	char	*result;
+
+	readed = 1;
+	result = NULL;
+	readed_str = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+		if (readed_str == NULL)
+			return (NULL);
+	while (readed)
+	{
+		readed = read(fd, readed_str, BUFFER_SIZE);
+		if (readed == -1 || readed == 0)
+		{
+			free(readed_str);
+			return (NULL);
+		}
+		readed_str[readed] = '\0';
+		readed = ft_join(readed_str, &result);
+	}
+	free(readed_str);
+	return (result);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*static_str;
+	char		*new_str;
+
+	new_str = NULL;
+	if (fd > 255 || fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	new_str = ft_read(fd);
+	if (new_str == NULL && static_str == NULL)
+		return (NULL);
+	
+
+	// if (new_str != NULL || static_str != NULL)
+	// {
+	// 	if (static_str != NULL && !static_str[0])
+	// 	{
+	// 		static_str = NULL;
+	// 	}
+	// 	new_str = ft_control(&static_str, new_str);
+	// }
+	return (ft_control(&static_str, new_str));
+}
+
+
+int main(void)
+{
+    int fd;
+    fd = open("t.text", O_RDONLY);
+   
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+
+    printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+
+    close(fd);
+    return 0;
 }

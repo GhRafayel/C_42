@@ -1,0 +1,16 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/rafayelghazaryan/Desktop/C_42/test/get_next_line/test'
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _ft_strlen, symObjAddr: 0x0, symBinAddr: 0x100003680, symSize: 0x50 }
+  - { offsetInCU: 0x41, offset: 0x41, size: 0x8, addend: 0x0, symName: _get_next_line, symObjAddr: 0x714, symBinAddr: 0x100003D94, symSize: 0x78 }
+  - { offsetInCU: 0x68, offset: 0x68, size: 0x8, addend: 0x0, symName: _get_next_line.static_str, symObjAddr: 0x1978, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0x95, offset: 0x95, size: 0x8, addend: 0x0, symName: _ft_strlen, symObjAddr: 0x0, symBinAddr: 0x100003680, symSize: 0x50 }
+  - { offsetInCU: 0xCB, offset: 0xCB, size: 0x8, addend: 0x0, symName: _ft_strjoin, symObjAddr: 0x50, symBinAddr: 0x1000036D0, symSize: 0x114 }
+  - { offsetInCU: 0x12B, offset: 0x12B, size: 0x8, addend: 0x0, symName: _ft_strdup, symObjAddr: 0x164, symBinAddr: 0x1000037E4, symSize: 0xB8 }
+  - { offsetInCU: 0x16F, offset: 0x16F, size: 0x8, addend: 0x0, symName: _ft_substr, symObjAddr: 0x21C, symBinAddr: 0x10000389C, symSize: 0x194 }
+  - { offsetInCU: 0x1DD, offset: 0x1DD, size: 0x8, addend: 0x0, symName: _ft_join, symObjAddr: 0x3B0, symBinAddr: 0x100003A30, symSize: 0x130 }
+  - { offsetInCU: 0x234, offset: 0x234, size: 0x8, addend: 0x0, symName: _ft_control, symObjAddr: 0x4E0, symBinAddr: 0x100003B60, symSize: 0x144 }
+  - { offsetInCU: 0x28B, offset: 0x28B, size: 0x8, addend: 0x0, symName: _ft_read, symObjAddr: 0x624, symBinAddr: 0x100003CA4, symSize: 0xF0 }
+  - { offsetInCU: 0x2E2, offset: 0x2E2, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x78C, symBinAddr: 0x100003E0C, symSize: 0x140 }
+...

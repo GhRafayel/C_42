@@ -96,48 +96,6 @@ char	*ft_join(char *temp, char *readed_str)
 	}
 	else
 		temp = ft_strdup(readed_str);
-	free(readed_str);
-	return (temp);
-}
-
-char	*ft_read(int fd, size_t buffer)
-{
-	ssize_t	readed;
-	char	*readed_str;
-	char	*temp;
-	int  i;
-
-	temp = NULL;
-	readed = 1;
-	while (readed)
-	{
-		readed_str = (char *)malloc((buffer + 1) * sizeof(char));
-		if (readed_str == NULL)
-			return (NULL);
-		readed = read(fd, readed_str, buffer);
-		if (readed == -1)
-		{
-			free(readed_str);
-			return(NULL);
-		}
-		if (readed == 0)
-		{
-			free(readed_str);
-			return (temp);
-		}
-		readed_str[readed] = '\0';
-		i = 0;
-		while(readed_str[i])
-		{
-			if(readed_str[i] == '\n')
-			{
-				temp = ft_join(temp, readed_str);
-				return (temp);
-			}
-			i++;
-		}
-		temp = ft_join(temp, readed_str);
-	}
 	return (temp);
 }
 
@@ -145,18 +103,24 @@ char	*ft_control(char **static_str, char *new_str)
 {
 	char	*ss;
 	int i = 0;
-	if(!new_str)
-		return (*static_str);
-	if(*static_str != NULL)
+	
+	if (new_str)
 	{
-		ss = ft_strjoin(*static_str, new_str);
+		if(*static_str != NULL)
+		{
+			ss = ft_strjoin(*static_str, new_str);
+			free(*static_str);
+		}
+		else
+		{
+			ss = ft_strdup(new_str);
+		}
 		free(new_str);
-		free(*static_str);
 	}
 	else
 	{
-		ss = ft_strdup(new_str);
-		free(new_str);
+		ss = ft_strdup(*static_str);
+		free(*static_str);
 	}
 	while (ss[i])
 	{
@@ -172,21 +136,65 @@ char	*ft_control(char **static_str, char *new_str)
 	return (ss);
 }
 
+char	*ft_read(int fd)
+{
+	ssize_t	readed;
+	char	*readed_str;
+	char	*temp;
+	int  i;
+
+	temp = NULL;
+	readed = 1;
+	while (readed)
+	{
+		readed_str = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+		if (readed_str == NULL)
+			return (NULL);
+		readed = read(fd, readed_str, BUFFER_SIZE);
+		if (readed == -1)
+		{
+			free(readed_str);
+			return(NULL);
+		}
+		readed_str[readed] = '\0';
+		if (readed == 0)
+		{
+			free(readed_str);
+			return (temp);
+		}
+		i = 0;
+		while(readed_str[i])
+		{
+			if(readed_str[i] == '\n')
+			{
+				temp = ft_join(temp, readed_str);
+				free(readed_str);
+				return (temp);
+			}
+			i++;
+		}
+		temp = ft_join(temp, readed_str);
+		free(readed_str);
+	}
+	return (temp);
+}
+
 char	*get_next_line(int fd)
 {
-	//static char	*static_str;
-	static MyStruct  static_obj;
-
+	static char	*static_str;
+	//static MyStruct  static_obj;
 	char	*new_str;
-	size_t	buffer;
 	new_str = NULL;
-	buffer = BUFFER_SIZE;
-	if (fd > 255 || fd < 0 || buffer < 0)
+	if (fd > 255 || fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	new_str = ft_read(fd, buffer);
-	if (new_str != NULL || static_obj.str != NULL)
+	new_str = ft_read(fd);
+	if (new_str != NULL || static_str != NULL)
 	{
-		return (ft_control(&static_obj.str, new_str));
+		if (static_str != NULL && static_str[0] == '\0')
+		{
+			static_str = NULL;
+		}
+		new_str = ft_control(&static_str, new_str);
 	}
 	return (new_str);
 }
@@ -197,19 +205,15 @@ int main(void)
     fd = open("t.text", O_RDONLY);
    
 	printf("%s", get_next_line(fd));
-		printf("yes\n");
-
 	printf("%s", get_next_line(fd));
-	//printf("%s", get_next_line(fd));
-	// TEST("multiple_nl.txt", {
-	// 	int fd = open(_title, O_RDONLY);
-	// 	/* 1 */ test_gnl(fd, "\n");
-	// 	/* 2 */ test_gnl(fd, "\n");
-	// 	/* 3 */ test_gnl(fd, "\n");
-	// 	/* 4 */ test_gnl(fd, "\n");
-	// 	/* 5 */ test_gnl(fd, "\n");
-	// 	/* 6 */ test_gnl(fd, NULL);
-	// });
+	printf("%s", get_next_line(fd));
+
+    printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 
     close(fd);
     return 0;

@@ -11,14 +11,15 @@
 # include <stdio.h>
 # include <string.h>
 
-typedef struct obj{
+typedef struct obj
+{
     int id;
     char *str;
     struct obj	*next;
 } MyStruct;
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 40
+#  define BUFFER_SIZE 4
 # endif
 
 # ifndef MAX_FD
@@ -29,7 +30,6 @@ char	*ft_strdup(const char *s1);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_substr(const char *s, unsigned start, size_t len);
 
-size_t	ft_strlcpy(char *dest, char *src, size_t len);
 size_t	ft_strlen(const char *s);
 
 char	*get_next_line(int fd);
