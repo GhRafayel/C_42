@@ -320,7 +320,6 @@ ssize_t	ft_join(char *readed_str, char **result)
 	return (1); // '\n' չի գտնվել
 }
 
-
 char	*ft_control(char **static_str, char *new_str)
 {
 	char	*result;
@@ -403,6 +402,7 @@ char	*get_next_line(int fd)
 
 int main(void)
 {
+	 ///* 3 */ gnl(fd, NULL);) close(fd);
     int fd;
     fd = open("t.text", O_RDONLY);
    
