@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line                                      :+:      :+:    :+:   */
+/*   ft_print_hex.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rghazary <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/09 11:07:46 by rghazary          #+#    #+#             */
-/*   Updated: 2024/09/09 11:07:49 by rghazary         ###   ########.fr       */
+/*   Created: 2024/09/27 20:56:10 by rghazary          #+#    #+#             */
+/*   Updated: 2024/09/27 20:56:12 by rghazary         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,99 +17,90 @@ size_t	ft_strlen(const char *s)
 	size_t	len;
 
 	len = 0;
-	while (*s)
+	while (s[len])
 	{
 		len++;
-		s++;
 	}
 	return (len);
 }
 
-char	*ft_strdup(const char *s1)
+ssize_t	ft_str_chr(char *str)
 {
-	char	*new_str;
-	char	*str;
-
-	new_str = (char *)malloc((ft_strlen(s1) + 1) * sizeof(char));
-	if (new_str == NULL)
-		return (NULL);
-	str = new_str;
-	while (*s1)
-	{
-		*new_str = *s1;
-		new_str++;
-		s1++;
-	}
-	*new_str = '\0';
-	return (str);
-}
-
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	char		*p;
-	char		*new_str;
-	int			length;
-
-	length = ft_strlen(s1) + ft_strlen(s2) + 1;
-	new_str = (char *)malloc(length * sizeof(char));
-	if (new_str == NULL)
-		return (NULL);
-	p = new_str;
-	while (*s1)
-	{
-		*new_str++ = *s1++;
-	}
-	while (*s2)
-	{
-		*new_str++ = *s2++;
-	}
-	*new_str = '\0';
-	return (p);
-}
-
-char	*ft_substr(const char *s, unsigned start, size_t len)
-{
-	unsigned int	i;
-	char			*new_str;
-	size_t			s_len;
+	size_t	i;
 
 	i = 0;
-	s_len = ft_strlen(s);
-	if (s == NULL)
-		return (NULL);
-	if (start >= s_len)
-		return (ft_strdup(""));
-	if (len > s_len - start)
-		len = s_len - start;
-	new_str = (char *)malloc((len + 1) * sizeof(char));
-	if (new_str == NULL)
-		return (NULL);
-	while (s[i + start] && len)
+	if (str)
 	{
-		new_str[i] = s[i + start];
-		i++;
-		len--;
+		while (str[i] != '\0')
+		{
+			if (str[i] == '\n')
+				return (i);
+			i++;
+		}
 	}
-	new_str[i] = '\0';
-	return (new_str);
+	return (-1);
 }
 
-size_t	ft_strlcpy(char *dest, char *src, size_t len)
+char	*ft_strdup(char **dest, char **src)
 {
-	size_t	l;
+	int		i;
+	size_t	count;
 
-	l = ft_strlen(src);
-	if (len == 0)
+	i = 0;
+	count = ft_strlen(*src);
+	*dest = (char *)malloc((count + 1) * sizeof(char));
+	if (*dest == NULL)
 	{
-		return (l);
+		return (free(*src), *src = NULL);
 	}
-	while (*src && len > 1)
+	while ((*src)[i] != '\0')
 	{
-		*dest = *src;
-		dest++;
-		src++;
-		len--;
+		(*dest)[i] = (*src)[i];
+		i++;
 	}
-	*dest = '\0';
-	return (l);
+	(*dest)[i] = '\0';
+	return (free(*src), *src = NULL, *dest);
+}
+
+char	*ft_str_join(char **str1, char **str2)
+{
+	char	*temp;
+	size_t	len;
+	size_t	i;
+	size_t	j;
+
+	temp = NULL;
+	if (*str1 == NULL)
+		return (ft_strdup(&*str1, &*str2));
+	len = ft_strlen(*str1) + ft_strlen(*str2) + 1;
+	temp = (char *)malloc(len * sizeof(char));
+	if (temp == NULL)
+		return (free(*str1), free(*str2), NULL);
+	i = -1;
+	while ((*str1)[++i])
+		temp[i] = (*str1)[i];
+	j = -1;
+	while ((*str2)[++j])
+		temp[i + j] = (*str2)[j];
+	temp[j + i] = '\0';
+	free(*str1);
+	*str1 = temp;
+	return (free(*str2), *str2 = NULL, *str1);
+}
+
+char	*ft_sub_str(char **dest, char **src, size_t start, size_t len)
+{
+	size_t	i;
+
+	i = 0;
+	*dest = (char *)malloc((len - start + 1) * sizeof(char));
+	if (*dest == NULL)
+		return (free(*src), NULL);
+	while ((*src)[i + start] && i < len)
+	{
+		(*dest)[i] = (*src)[start + i];
+		i++;
+	}
+	(*dest)[i] = '\0';
+	return (*dest);
 }

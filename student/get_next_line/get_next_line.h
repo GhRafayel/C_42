@@ -24,20 +24,17 @@
 # include <string.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 40
+#  define BUFFER_SIZE 10
 # endif
 
 # ifndef MAX_FD
 #  define MAX_FD 256
 # endif
 
-char	*ft_strdup(const char *s1);
-char	*ft_strjoin(const char *s1, const char *s2);
-char	*ft_substr(const char *s, unsigned start, size_t len);
-
-size_t	ft_strlcpy(char *dest, char *src, size_t len);
 size_t	ft_strlen(const char *s);
-
+ssize_t	ft_str_chr(char *str);
 char	*get_next_line(int fd);
-
+char	*ft_strdup(char **result, char **str_readed);
+char	*ft_str_join(char **result, char **str_readed);
+char	*ft_sub_str(char **dest, char **src, size_t start, size_t len);
 #endif

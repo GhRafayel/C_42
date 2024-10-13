@@ -11,13 +11,6 @@
 # include <stdio.h>
 # include <string.h>
 
-typedef struct obj
-{
-    int id;
-    char *str;
-    struct obj	*next;
-} MyStruct;
-
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4
 # endif
