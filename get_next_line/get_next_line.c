@@ -47,21 +47,22 @@ char	*get_next_line(int fd)
 	char			*str_readed;
 	ssize_t			count;
 
+	int ss = BUFFER_SIZE;
 	count = 1;
 	if (fd > 1024 || fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	while (count)
 	{
-		str_readed = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+		str_readed = (char *)malloc((ss + 1) * sizeof(char));
 		if (str_readed == NULL)
 			return (free(static_str), static_str = NULL, NULL);
-		count = read(fd, str_readed, BUFFER_SIZE);
+		count = read(fd, str_readed, ss);
 		if (count < 0)
 			return (free(str_readed), free(static_str), static_str = NULL);
 		if (count > 0)
 		{
 			str_readed[count] = '\0';
-			ft_str_join(&static_str, &str_readed, &count);
+			ft_str_join(&static_str, &str_readed, &count, &ss);
 		}
 		else
 			free(str_readed);
@@ -69,20 +70,20 @@ char	*get_next_line(int fd)
 	return (ft_control(&static_str));
 }
 
-// int main(void)
-// {
-// 	int fd;
-// 	fd = open("t.txt", O_RDONLY);
-// 	char *str = NULL;
-// 	int i = 0;
-// 	while (i < 9)
-// 	{
-// 		str = get_next_line(fd);
-// 		printf("ind %d {%s} \n", i, str);
-// 		free(str);
-// 		str = NULL;
-// 		i++;
-// 	}
-//     close(fd);
-//     return (0);
-// }
+int main(void)
+{
+	int fd;
+	fd = open("t.txt", O_RDONLY);
+	char *str = NULL;
+	int i = 0;
+	while (i < 2)
+	{
+		str = get_next_line(fd);
+		printf("ind %d {%s} \n", i, str);
+		free(str);
+		str = NULL;
+		i++;
+	}
+    close(fd);
+    return (0);
+}
