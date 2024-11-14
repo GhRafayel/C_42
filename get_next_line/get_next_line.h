@@ -6,7 +6,7 @@
 /*   By: rghazary <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 11:07:46 by rghazary          #+#    #+#             */
-/*   Updated: 2024/09/09 11:07:49 by rghazary         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:35:24 by rghazary         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,12 @@
 # include <string.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 1
 # endif
 
+# ifndef MAX_FD
+#  define MAX_FD 256
+# endif
 
 size_t	ft_strlen(const char *s);
 ssize_t	ft_str_chr(char *str);
