@@ -13,15 +13,15 @@
 
 void	rr(t_stack **stack_a, t_stack **stack_b)
 {
-	ra_rb(stack_a, "ra");
-	ra_rb(stack_b, "rb");
+	ra_rb(stack_a, 'r');
+	ra_rb(stack_b, 'r');
 	ft_printf("rr\n");
 }
 
 void	rrr(t_stack **stack_a, t_stack **stack_b)
 {
-	rra_rrb(stack_a, "rra");
-	rra_rrb(stack_b, "rrb");
+	rra_rrb(stack_a, 'r');
+	rra_rrb(stack_b, 'r');
 	ft_printf("rrr\n");
 }
 

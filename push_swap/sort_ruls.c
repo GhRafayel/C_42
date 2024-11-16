@@ -11,55 +11,64 @@
 /* ************************************************************************** */
 #include "push_swap.h"
 
-void	sa_sb(t_stack *stack, char *str)
+void	sa_sb(t_stack **stack, char str)
 {
 	int	temp;
 
-	if (stack)
+	if (*stack)
 	{
-		temp = stack -> val;
-		stack -> val = stack -> next -> val;
-		stack -> next -> val = temp;
-		ft_printf("%s\n", str);
+		temp = (*stack) -> val;
+		(*stack) -> val = (*stack) -> next -> val;
+		(*stack) -> next -> val = temp;
+		if (str == 'a')
+			ft_printf("sa\n");
+		else if (str == 'b')
+			ft_printf("sb\n");
 	}
 }
 
-void	ss(t_stack *stack_a, t_stack *stack_b)
+void	ss(t_stack **stack_a, t_stack **stack_b)
 {
-	sa_sb(stack_a, "sa");
-	sa_sb(stack_b, "sb");
+	sa_sb(stack_a, 'r');
+	sa_sb(stack_b, 'r');
 	ft_printf("ss\n");
 }
 
-void	pa_pb(t_stack **stack_dest, t_stack **stack_src, char *str)
+void	pa_pb(t_stack **stack_dest, t_stack **stack_src, char str)
 {
 	t_stack	*start;
-
+	
 	if (*stack_src)
 	{
-		start = *stack_src;
-		*stack_src = start -> next;
-		start -> next = *stack_src;
+		start = (*stack_src);
+		(*stack_src) = start -> next;
+		start -> next = (*stack_src);
 		add_front(stack_dest, start);
-		ft_printf("%s\n", str);
+		if (str == 'a')
+			ft_printf("pa\n");
+		else if (str == 'b')
+			ft_printf("pb\n");
 	}
 }
 
-void	ra_rb(t_stack **stack, char *str)
+void	ra_rb(t_stack **stack, char str)
 {
 	t_stack	*start;
 
 	if (*stack)
 	{
-		start = *stack;
-		*stack = start -> next;
-		start -> next = *stack;
+		start = (*stack);
+		(*stack) = start -> next;
+		start -> next = (*stack);
 		add_back(stack, start);
-		ft_printf("%s\n", str);
+		if (str == 'a')
+			ft_printf("ra\n");
+		else if (str == 'b')
+			ft_printf("rb\n");
 	}
 }
 
-void	rra_rrb(t_stack **stack, char *str)
+void	rra_rrb(t_stack **stack, char str)
 {
 	t_stack	*pnt;
 	t_stack	*last;
@@ -75,6 +84,9 @@ void	rra_rrb(t_stack **stack, char *str)
 		pnt -> next = NULL;
 		last -> next = *stack;
 		*stack = last;
-		ft_printf("%s\n", str);
+		if (str == 'a')
+			ft_printf("rra\n");
+		else if (str == 'b')
+			ft_printf("rrb\n");
 	}
 }

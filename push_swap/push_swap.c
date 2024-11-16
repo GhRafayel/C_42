@@ -67,81 +67,241 @@ void	print_stack(t_stack *stack, char *s)
 	}
 	printf("----------------------------------\n\n");
 }
-
-int	find_big(t_stack *stack, char *str, int *i)
+/*
+void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
 {
-	if (stack -> val > last_node(stack))
+	if(stack_size(*stack_b) > 1)
 	{
-		ra_rb(&stack, str);
-		*i += 1;
-		return (1);
-	}
-	return (0);
-}
-void	sort(t_stack *stack_a, t_stack *stack_b)
-{
-	int	i = 0;
-
-	print_stack(stack_a, "stack_a");
-	print_stack(stack_b, "stack_b");
-
-	while(stack_size(stack_a) != 1)
-	{
-		if (stack_size(stack_b) >= 2 && !find_big(stack_a, "ra", &i))
+		if ((*stack_a) -> val > last_node(*stack_a))
 		{
-			if (stack_a -> val > last_node(stack_a))
+			if ((*stack_b) -> val < last_node(*stack_b))
 			{
-				if (stack_b -> val < last_node(stack_b))
-				{
-					rr(stack_a, "rr");
-					i++;
-				}
-				ra_rb(stack_a, "ra");
+				rr(stack_a, stack_b);
+				*i += 1;
 			}
 			else
 			{
-				if (stack_a -> val < stack_a -> next -> val)
-				{
-					ra_rb(&stack_b, "rb");
-					i++;
-				}
+				ra_rb(stack_a, 'a');
+				*i += 1;
 			}
 		}
-		else if (stack_size(stack_b) < 2)
+		if ((*stack_b) -> val < last_node(*stack_b))
 		{
-			if (!find_big(stack_a, "ra", &i))
+			ra_rb(stack_a, 'b');
+				*i += 1;
+		}
+		if (last_node(*stack_a) < (*stack_a) -> val)
+		{
+			if (last_node(*stack_b) > (*stack_b) -> val)
 			{
-				pa_pb(&stack_b, &stack_a, "pb");
-				i++;
+				rrr(stack_a, stack_b);
+				*i += 1;
+			}
+			else
+			{
+				rra_rrb(stack_a, 'a');
+				*i += 1;
 			}
 		}
+		if (last_node(*stack_b) > (*stack_b) -> val)
+		{
+			rra_rrb(stack_a, 'b');
+			*i += 1;
+		}
+		if ((*stack_a) -> val > (*stack_a) -> next -> val)
+		{
+			if ((*stack_b) -> val < (*stack_b) -> next -> val)
+			{
+				ss(stack_a, stack_b);
+				*i += 1;
+			}
+			else
+			{
+				sa_sb(stack_a, 'a');
+				*i += 1;
+			}
+		}
+		if ((*stack_b) -> val < (*stack_b) -> next -> val)
+		{
+			sa_sb(stack_b, 'b');
+			*i += 1;
+		}
 	}
-	while (stack_size(stack_b) != 0)
+}
+*/
+
+
+
+void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
+{
+	if(stack_size(*stack_b) > 1)
 	{
-		pa_pb(&stack_a, &stack_b, "pa");
-		i++;
+		if ((*stack_a) -> val > last_node(*stack_a))
+		{
+			if ((*stack_b) -> val < last_node(*stack_b))
+			{
+				rr(stack_a, stack_b);
+				*i += 1;
+			}
+			else
+			{
+				ra_rb(stack_a, 'a');
+				*i += 1;
+			}
+		}
+		if ((*stack_a) -> val > (*stack_a) -> next -> val)
+		{
+			if ((*stack_b) -> val < (*stack_b) -> next -> val && (*stack_b) -> val > last_node(*stack_b))
+			{
+				ss(stack_a, stack_b);
+				*i += 1;
+			}
+			else 
+			{
+				sa_sb(stack_a, 'a');
+				*i += 1;
+			}
+		}
+		
+		if (last_node(*stack_a) < (*stack_a) -> val)
+		{
+			if (last_node(*stack_b) > (*stack_b) -> val)
+			{
+				rrr(stack_a, stack_b);
+				*i += 1;
+			}
+			else
+			{
+				rra_rrb(stack_a, 'a');
+				*i += 1;
+			}
+		}
+		
+		if ((*stack_b) -> val < last_node(*stack_b))
+		{
+			ra_rb(stack_b, 'b');
+				*i += 1;
+		}
+		if ((*stack_b) -> val < (*stack_b) -> next -> val)
+		{
+			sa_sb(stack_b, 'b');
+			*i += 1;
+		}
+		if (last_node(*stack_b) > (*stack_b) -> val)
+		{
+			rra_rrb(stack_a, 'b');
+			*i += 1;
+		}
 	}
-	print_stack(stack_a, "stack_a");
-	print_stack(stack_b, "stack_b");
-	printf("===%d===\n",i);
 }
 
-void	to_sort(t_stack *stack_a, t_stack *stack_b)
+void	sort(t_stack **stack_a, t_stack **stack_b)
 {
-		if (stack_size(stack_a) == 3 && !list_sorted(stack_a, 'a'))
+	int i = 0;
+	// print_stack(*stack_a, "stack_a");
+	// print_stack(*stack_b, "stack_b");
+
+	while (stack_size(*stack_a) > 2)
+	{
+		foo(stack_a, stack_b, &i);
+		// print_stack(*stack_a, "stack_a");
+		// print_stack(*stack_b, "stack_b");
+		
+	
+		if(stack_size(*stack_b) > 1)
 		{
-			while (!list_sorted(stack_a, 'a'))
+			if ((*stack_a) -> val > last_node(*stack_b) && (*stack_a) -> val < (*stack_b)-> val)
 			{
-				if (stack_a -> val > last_node(stack_a))
-					ra_rb(&stack_a, "ra");
-				else if (stack_a -> val > stack_a -> next -> val)
-					sa_sb(stack_a, "sa");
-				else
-					rra_rrb(&stack_a, "rra");
+				ra_rb(stack_a, 'a');
+				i++;
+				while (last_node(*stack_a) < (*stack_b) -> val)
+				{
+
+					pa_pb(stack_a, stack_b, 'a');
+					i++;
+				}
+				rra_rrb(stack_a, 'a');
+				i++;
+			}
+			if (list_sorted(*stack_a, 'a') && list_sorted(*stack_b, 'b') && (*stack_a) -> val > (*stack_b) -> val)
+			{
+				break;
 			}
 		}
+		if ((*stack_a) -> val > last_node(*stack_a))
+		{
+			ra_rb(stack_a, 'a');
+			i++;
+		}
 		else
-			sort(stack_a, stack_b);
+		{
+			pa_pb(stack_b, stack_a, 'b');
+			i++;
+		}
+		// print_stack(*stack_a, "stack_a");
+		// print_stack(*stack_b, "stack_b");
+	}
+	while (stack_size(*stack_b))
+	{
+		pa_pb(stack_a, stack_b, 'a');
+		i++;
+	}
+	
+	print_stack(*stack_a, "stack_a");
+	print_stack(*stack_b, "stack_b");
+	printf(" count %d\n", i);
+}
+
+
+
+
+/*
+void	sort(t_stack **stack_a, t_stack **stack_b)
+{
+	int i = 0;
+	print_stack(*stack_a, "stack_a");
+	print_stack(*stack_b, "stack_b");
+
+	while (stack_size(*stack_a) > 3)
+	{
+		foo(stack_a, stack_b, &i);
+		if ((*stack_a) -> val > last_node(*stack_a))
+		{
+			ra_rb(stack_a, 'a');
+			i++;
+		}
+		else
+		{
+			pa_pb(stack_b, stack_a, 'b');
+			i++;
+		}
+	}
+	print_stack(*stack_a, "stack_a");
+	print_stack(*stack_b, "stack_b");
+	printf(" count %d\n", i);
+
+	
+}
+
+*/
+void	to_sort(t_stack **stack_a, t_stack **stack_b)
+{
+	if (stack_size(*stack_a) == 3 && !list_sorted(*stack_a, 'a'))
+	{
+		print_stack(*stack_a, "stack_a");
+		while (!list_sorted(*stack_a, 'a'))
+		{
+			if ((*stack_a) -> val > last_node(*stack_a))
+				ra_rb(stack_a, 'a');
+			else if ((*stack_a) -> val > (*stack_a) -> next -> val)
+				sa_sb(stack_a, 'a');
+			else
+				rra_rrb(stack_a, 'a');
+		}
+		print_stack(*stack_a, "stack_a");
+	}
+	else if (!list_sorted(*stack_a, 'a'))
+		sort(stack_a, stack_b);
 }
 
 int	main(int n, char **s)
@@ -167,8 +327,7 @@ int	main(int n, char **s)
 			add_back (&stack_a, create_new_node(num));
 			i++;
 		}
-		min_and_max(stack_a);
-		to_sort(stack_a, stack_b);
+		to_sort(&stack_a, &stack_b);
 	}
 	return (0);
 }

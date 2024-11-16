@@ -81,9 +81,10 @@ void	add_back(t_stack **stack, t_stack *node)
 int	stack_size(t_stack *stack)
 {
 	unsigned int	size;
-
+	// if (!stack)
+	// 	return (-1);
 	size = 0;
-	while (stack != NULL)
+	while (stack)
 	{
 		size++;
 		stack = stack -> next;
