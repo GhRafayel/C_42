@@ -29,6 +29,124 @@ int	        ft_chac_args(char **s);
 int	        ft_atoi(const char *str);
 int	        ft_isdigit(int ch);
 
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (*s)
+	{
+		len++;
+		s++;
+	}
+	return (len);
+}
+char	*ft_substr(const char *s, unsigned start, size_t len)
+{
+	char			*new_str;
+	unsigned int	i;
+	size_t			s_len;
+
+	i = 0;
+	s_len = ft_strlen(s);
+	if (s == NULL)
+		return (NULL);
+	if (start >= s_len)
+		return ("");
+	if (len > s_len - start)
+		len = s_len - start;
+	new_str = (char *)malloc((len + 1) * sizeof(char));
+	if (new_str == NULL)
+		return (NULL);
+	while (s[i + start] && len)
+	{
+		new_str[i] = s[i + start];
+		i++;
+		len--;
+	}
+	new_str[i] = '\0';
+	return (new_str);
+}
+
+static size_t	how_many_words(const char *s, char c)
+{
+	size_t	count;
+	size_t	in_word;
+
+	count = 0;
+	in_word = 0;
+	while (*s)
+	{
+		if (*s != c && in_word == 0)
+		{
+			count++;
+			in_word = 1;
+		}
+		else if (*s == c)
+		{
+			in_word = 0;
+		}
+		s++;
+	}
+	return (count);
+}
+
+static void	*ft_free(char **result, size_t i)
+{
+	while (i > 0)
+	{
+		free(result[--i]);
+	}
+	free(result);
+	return (NULL);
+}
+
+static char	**ft_create_str(char **result, const char *s, char c)
+{
+	size_t	i;
+	size_t	start;
+	size_t	end;
+
+	end = 0;
+	start = 0;
+	i = 0;
+	while (s[start] != '\0')
+	{
+		if (s[start] != c)
+		{
+			end = 0;
+			while (s[end + start] != c && s[end + start] != '\0')
+				end++;
+			result[i] = ft_substr(s, start, end);
+			if (result[i] == NULL)
+				return (ft_free(result, i));
+			i++;
+			start += end;
+		}
+		else
+			start++;
+	}
+	result[i] = NULL;
+	return (result);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**result;
+
+	if (s == NULL)
+	{
+		return (NULL);
+	}
+	result = (char **)malloc((how_many_words(s, c) + 1) * sizeof(char *));
+	if (result == NULL)
+	{
+		return (NULL);
+	}
+	return (ft_create_str(result, s, c));
+}
+
 int	ft_isdigit(int ch)
 {
 	if (ch >= 48 && ch <= 57)
@@ -256,32 +374,6 @@ int	ft_int_valid(t_stack *stack_a, int num)
 	return (0);
 }
 
-int	ft_chac_args(char **s)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	j = 0;
-	while (s[i])
-	{
-		j = 0;
-		if (s[i][j] == '-')
-			j++;
-		while (s[i][j])
-		{
-			if (!(s[i][j] >= '0' && s[i][j] <= '9'))
-			{
-				printf("error ft_chac_args");
-				return (0);
-			}
-			j++;
-		}
-		i++;
-	}
-	return (1);
-}
-
 void	print_stack(t_stack *stack, char *s)
 {
 	t_stack	*p;
@@ -371,38 +463,99 @@ void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
 	}
 }
 
+char	what_stack(t_stack **stack_a, t_stack **stack_b, int num)
+{
+	t_stack *pnt;
+	char	res;
+
+	pnt = *stack_a;
+	res = '\0';
+	while (pnt -> next)
+	{
+		if (pnt -> val == num)
+			return('a');
+		pnt = pnt -> next;
+	}
+	pnt = *stack_b;
+	while (pnt -> next)
+	{
+		if (pnt -> val == num)
+			return('b');
+		pnt = pnt -> next;
+	}
+	return (res);
+}
+char	fint_place(t_stack **stack_a, t_stack **stack_b, int num)
+{
+	t_stack *pnt;
+
+	pnt = *stack_a;
+	int res = num;
+	int tru = 1;
+	while (pnt -> next)
+	{
+		if (pnt -> val > num && tru)
+		{
+			res = pnt -> val;
+			tru = 0;
+		}
+		if (pnt -> val > num && pnt -> val < res)
+			res = pnt -> val;
+		pnt = pnt -> next;
+	}
+	pnt = *stack_b;
+	while (pnt -> next)
+	{
+		if (pnt -> val > num && pnt -> val < res)
+			res = pnt -> val;
+		pnt = pnt -> next;
+	}
+	return (what_stack(stack_a, stack_b, res));
+}
+
 void	sort(t_stack **stack_a, t_stack **stack_b)
 {
 	int i = 0;
 	print_stack(*stack_a, "stack_a");
 	print_stack(*stack_b, "stack_b");
 
-	while (stack_size(*stack_a) > 2)
+	while (!list_sorted(*stack_a, 'a') || !list_sorted(*stack_b, 'b') && stack_size(*stack_a) > 2)
 	{
 		foo(stack_a, stack_b, &i);
-		print_stack(*stack_a, "stack_a");
-		print_stack(*stack_b, "stack_b");
-		
-	
 		if(stack_size(*stack_b) > 1)
 		{
+			print_stack(*stack_a, "stack_a");
+			print_stack(*stack_b, "stack_b");
 			if ((*stack_a) -> val > last_node(*stack_b) && (*stack_a) -> val < (*stack_b)-> val)
 			{
-				ra_rb(stack_a, 'a');
-				i++;
-				while (last_node(*stack_a) < (*stack_b) -> val)
+				if(fint_place(stack_a, stack_b, (*stack_b) -> val) == 'a')
 				{
-
 					pa_pb(stack_a, stack_b, 'a');
+					//ra_rb(stack_a, 'a');
+					foo(stack_a, stack_b, &i);
+					pa_pb(stack_b, stack_a, 'b');
+					while ((*stack_b) -> val < (*stack_b) -> next -> val)
+					{
+						sa_sb(stack_b, 'b');
+					}
+					print_stack(*stack_a, "stack_a");
+					print_stack(*stack_b, "stack_b");
+					i+=2;
+				}
+				else
+				{
+					ra_rb(stack_a, 'a');
+					while (last_node(*stack_a) < (*stack_b) -> val )
+					{
+						pa_pb(stack_a, stack_b, 'a');
+						i++;
+					}
+					rra_rrb(stack_a, 'a');
 					i++;
 				}
-				rra_rrb(stack_a, 'a');
-				i++;
 			}
 			if (list_sorted(*stack_a, 'a') && list_sorted(*stack_b, 'b') && (*stack_a) -> val > (*stack_b) -> val)
-			{
 				break;
-			}
 		}
 		if ((*stack_a) -> val > last_node(*stack_a))
 		{
@@ -411,88 +564,37 @@ void	sort(t_stack **stack_a, t_stack **stack_b)
 		}
 		else
 		{
-			pa_pb(stack_b, stack_a, 'b');
-			i++;
-		}
-		print_stack(*stack_a, "stack_a");
-		print_stack(*stack_b, "stack_b");
-	}
-	while (stack_size(*stack_b))
-	{
-		pa_pb(stack_a, stack_b, 'a');
-		i++;
-	}
-	
-	print_stack(*stack_a, "stack_a");
-	print_stack(*stack_b, "stack_b");
-	printf(" count %d\n", i);
-
-	/*
-	while ( tru)
-	{
-		foo(stack_a, stack_b, &i);
-		while (stack_size(*stack_b) < 2)
-		{
-			if ((*stack_a) -> val > last_node(*stack_a))
-			{
-				ra_rb(stack_a, 'a');
-				i++;
-			}
-			else
+			if(stack_size(*stack_b) < 2)
 			{
 				pa_pb(stack_b, stack_a, 'b');
 				i++;
 			}
-		}
-		if ((*stack_b) -> val < last_node(*stack_b))
-		{
-			ra_rb(stack_b, 'b');
-			i++;
-		}
-		foo(stack_a, stack_b, &i);
-		if ((*stack_a) -> val > last_node(*stack_a))
-		{
-			ra_rb(stack_a, 'a');
-			i++;
-		}
-		if ((*stack_a) -> val > (*stack_a) -> next -> val)
-		{
-			sa_sb(stack_a, 'a');
-			i++;
-		}	
-		if ((*stack_a) -> val > last_node(*stack_b) && (*stack_a) -> val < (*stack_b)-> val)
-		{
-			ra_rb(stack_a, 'a');
-			i++;
-			while (last_node(*stack_a) < (*stack_b) -> val)
+			else if ((*stack_a) -> val > (*stack_b)-> val || (*stack_a) -> val < last_node(*stack_b))
 			{
-				pa_pb(stack_a, stack_b, 'a');
-				i++;
+				pa_pb(stack_b, stack_a, 'b');
 			}
-			rra_rrb(stack_a, 'a');
-			i++;
-		}
-		if (list_sorted(*stack_a, 'a'))
-		{
-			if (stack_size(*stack_b))
+			else if((*stack_a) -> val < (*stack_b) -> val)
 			{
-				tru = 0;
-			}
-			while (stack_size(*stack_b))
-			{
-				i++;
-				pa_pb(stack_a, stack_b, 'a');
+				pa_pb(stack_b, stack_a, 'b');
+				foo(stack_a, stack_b, &i);
+				//sa_sb(stack_b, 'b');
 			}
 		}
-		else
-		{
-			i++;
-			pa_pb(stack_b, stack_a, 'b');
-		}
-		foo(stack_a, stack_b, &i);	
+		print_stack(*stack_a, "stack_a");
+		print_stack(*stack_b, "stack_b");
 	}
-	*/
-
+    foo(stack_a, stack_b, &i);
+	while (stack_size(*stack_b))
+	{
+		foo(stack_a, stack_b, &i);
+		print_stack(*stack_a, "stack_a");
+		print_stack(*stack_b, "stack_b");
+		pa_pb(stack_a, stack_b, 'a');
+		i++;
+	}
+	print_stack(*stack_a, "stack_a");
+	print_stack(*stack_b, "stack_b");
+	printf(" count %d\n", i);
 }
 
 void	to_sort(t_stack **stack_a, t_stack **stack_b)
@@ -515,14 +617,43 @@ void	to_sort(t_stack **stack_a, t_stack **stack_b)
 		sort(stack_a, stack_b);
 }
 
+char	**ft_check_args(char **s, int *len, int n)
+{
+	int	i;
+	int j;
+	char **str;
+
+	i = 1;
+	str = s;
+	if (n == 2)
+	{
+		str = ft_split(s[1], ' ');
+		*len = 0;
+		i = 0;
+	}
+	while (str[i])
+	{
+		j = 0;
+		while (str[i][j])
+		{
+			if (str[i][j] == '-')
+				j++;
+			if (!ft_isdigit(str[i][j]))
+				return (NULL);
+			j++;
+		}
+		i++;
+	}
+	return (str);
+}
+
 int	main(int nn, char **ss)
 {
-    (void)nn;
-    (void)ss;
-    char *s[10] = {"name","1", "9","8", "3", "6", "5", "2", "7"};
-
+	(void)nn;
+	(void)ss;
 	t_stack		*stack_a;
 	t_stack		*stack_b;
+	char		**str;
 	int			num;
 	int			i;
 
@@ -530,13 +661,17 @@ int	main(int nn, char **ss)
 	stack_b = NULL;
 	num = 0;
 	i = 1;
-	int n = 4;
-	if (n > 3 && ft_chac_args(s))
+
+	int n = 2;
+	char *s[2] = {"name", " 638 26  345 168 101 119 123 926 989 761 940 229 582 541 359 502 27 661 433 74 610 13 968 95 960 86 217 708 863 835 165 379 978 170 244 308 905 525 648 362"};
+
+	str = ft_check_args(s, &i, n);
+	if (n > 1 && str)
 	{
-		while (s[i])
+		while (str[i])
 		{
-			num = ft_atoi(s[i]);
-			if (num == 0 && s[i][1] != '\0')
+			num = ft_atoi(str[i]);
+			if (num == 0 && str[i][1] != '\0')
 				return (printf("error\n"), 0);
 			if (ft_int_valid(stack_a, num))
 				return (free(stack_a), free(stack_b), printf("Error\n"), 0);
@@ -547,3 +682,4 @@ int	main(int nn, char **ss)
 	}
 	return (0);
 }
+
