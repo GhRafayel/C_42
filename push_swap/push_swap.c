@@ -216,7 +216,6 @@ void	sort(t_stack **stack_a, t_stack **stack_b)
 				i++;
 				while (last_node(*stack_a) < (*stack_b) -> val)
 				{
-
 					pa_pb(stack_a, stack_b, 'a');
 					i++;
 				}
