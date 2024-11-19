@@ -130,8 +130,6 @@ void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
 }
 */
 
-
-
 void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
 {
 	if(stack_size(*stack_b) > 1)
@@ -250,8 +248,6 @@ void	sort(t_stack **stack_a, t_stack **stack_b)
 	print_stack(*stack_b, "stack_b");
 	printf(" count %d\n", i);
 }
-
-
 
 
 /*
