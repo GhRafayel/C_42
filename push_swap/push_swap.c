@@ -196,16 +196,10 @@ void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
 void	sort(t_stack **stack_a, t_stack **stack_b)
 {
 	int i = 0;
-	// print_stack(*stack_a, "stack_a");
-	// print_stack(*stack_b, "stack_b");
-
+	
 	while (stack_size(*stack_a) > 2)
 	{
 		foo(stack_a, stack_b, &i);
-		// print_stack(*stack_a, "stack_a");
-		// print_stack(*stack_b, "stack_b");
-		
-	
 		if(stack_size(*stack_b) > 1)
 		{
 			if ((*stack_a) -> val > last_node(*stack_b) && (*stack_a) -> val < (*stack_b)-> val)
@@ -235,8 +229,6 @@ void	sort(t_stack **stack_a, t_stack **stack_b)
 			pa_pb(stack_b, stack_a, 'b');
 			i++;
 		}
-		// print_stack(*stack_a, "stack_a");
-		// print_stack(*stack_b, "stack_b");
 	}
 	while (stack_size(*stack_b))
 	{
