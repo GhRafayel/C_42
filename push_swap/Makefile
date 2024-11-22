@@ -9,12 +9,12 @@
 #    Updated: 2024/10/30 12:39:27 by rghazary         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-SRCS = push_swap.c  sort_ruls.c sort_ruls2.c push_swap_utils.c
+SRCS = push_swap.c  sort_ruls_1.c sort_ruls_2.c push_swap_utils_1.c main.c push_swap_utils_2.c
 
 
 CFLAGS = -Wall -Wextra -Werror
 CC = cc
-NAME = push_swap.a
+NAME = push_swap
 OBJS = $(SRCS:.c=.o)
 
 LIBFT = ../libft/libft.a

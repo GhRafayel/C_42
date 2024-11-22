@@ -12,6 +12,47 @@
 
 #include "push_swap.h"
 
+void	print_stack(t_stack *stack, t_stack *stack_b)
+{
+	t_stack	*p;
+	t_stack *b;
+
+	p = stack;
+	b = stack_b;
+	char a = '-';
+	printf("stack_a		stack_b\n\n");
+	while (p || b)
+	{
+		if (!p)
+		{
+			printf("<   %c  >	<   %d  >\n", a, b -> val);
+		}
+		else if (!b)
+		{
+			printf("<    %d  >	<   %c  >\n", p -> val, a);
+		}
+		else
+		{
+			printf("<   %d  >	<   %d  >\n", p -> val, b -> val);
+		}
+		if (!p)
+		{
+			b = b -> next;
+		}
+		else if (!b)
+		{
+			p = p -> next;
+		}
+		else
+		{
+			p = p -> next;
+			b = b -> next;
+		}
+		
+	}
+	printf("----------------------------------\n\n");
+}
+
 int	ft_int_valid(t_stack *stack_a, int num)
 {
 	t_stack	*pnt;
@@ -54,228 +95,34 @@ int	ft_chac_args(char **s)
 	return (1);
 }
 
-void	print_stack(t_stack *stack, char *s)
-{
-	t_stack	*p;
-
-	p = stack;
-	printf("--------------%s-------------\n", s);
-	while (p)
-	{
-		printf("<   %d  >\n", p -> val);
-		p = p -> next;
-	}
-	printf("----------------------------------\n\n");
-}
-/*
-void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
-{
-	if(stack_size(*stack_b) > 1)
-	{
-		if ((*stack_a) -> val > last_node(*stack_a))
-		{
-			if ((*stack_b) -> val < last_node(*stack_b))
-			{
-				rr(stack_a, stack_b);
-				*i += 1;
-			}
-			else
-			{
-				ra_rb(stack_a, 'a');
-				*i += 1;
-			}
-		}
-		if ((*stack_b) -> val < last_node(*stack_b))
-		{
-			ra_rb(stack_a, 'b');
-				*i += 1;
-		}
-		if (last_node(*stack_a) < (*stack_a) -> val)
-		{
-			if (last_node(*stack_b) > (*stack_b) -> val)
-			{
-				rrr(stack_a, stack_b);
-				*i += 1;
-			}
-			else
-			{
-				rra_rrb(stack_a, 'a');
-				*i += 1;
-			}
-		}
-		if (last_node(*stack_b) > (*stack_b) -> val)
-		{
-			rra_rrb(stack_a, 'b');
-			*i += 1;
-		}
-		if ((*stack_a) -> val > (*stack_a) -> next -> val)
-		{
-			if ((*stack_b) -> val < (*stack_b) -> next -> val)
-			{
-				ss(stack_a, stack_b);
-				*i += 1;
-			}
-			else
-			{
-				sa_sb(stack_a, 'a');
-				*i += 1;
-			}
-		}
-		if ((*stack_b) -> val < (*stack_b) -> next -> val)
-		{
-			sa_sb(stack_b, 'b');
-			*i += 1;
-		}
-	}
-}
-*/
-
-void	foo(t_stack **stack_a, t_stack **stack_b, int *i)
-{
-	if(stack_size(*stack_b) > 1)
-	{
-		if ((*stack_a) -> val > last_node(*stack_a))
-		{
-			if ((*stack_b) -> val < last_node(*stack_b))
-			{
-				rr(stack_a, stack_b);
-				*i += 1;
-			}
-			else
-			{
-				ra_rb(stack_a, 'a');
-				*i += 1;
-			}
-		}
-		if ((*stack_a) -> val > (*stack_a) -> next -> val)
-		{
-			if ((*stack_b) -> val < (*stack_b) -> next -> val && (*stack_b) -> val > last_node(*stack_b))
-			{
-				ss(stack_a, stack_b);
-				*i += 1;
-			}
-			else 
-			{
-				sa_sb(stack_a, 'a');
-				*i += 1;
-			}
-		}
-		
-		if (last_node(*stack_a) < (*stack_a) -> val)
-		{
-			if (last_node(*stack_b) > (*stack_b) -> val)
-			{
-				rrr(stack_a, stack_b);
-				*i += 1;
-			}
-			else
-			{
-				rra_rrb(stack_a, 'a');
-				*i += 1;
-			}
-		}
-		
-		if ((*stack_b) -> val < last_node(*stack_b))
-		{
-			ra_rb(stack_b, 'b');
-				*i += 1;
-		}
-		if ((*stack_b) -> val < (*stack_b) -> next -> val)
-		{
-			sa_sb(stack_b, 'b');
-			*i += 1;
-		}
-		if (last_node(*stack_b) > (*stack_b) -> val)
-		{
-			rra_rrb(stack_a, 'b');
-			*i += 1;
-		}
-	}
-}
-
 void	sort(t_stack **stack_a, t_stack **stack_b)
 {
-	int i = 0;
-	
-	while (stack_size(*stack_a) > 2)
+	int len;
+	int n;
+
+	n = 2;
+	len = stack_size(*stack_a);
+	n = len / 5;
+	if (len > 250 && len <= 500)
+		n = len / 7;
+	if (len > 100 && len <= 250)
+		n = len / 6;
+	if (len < 20)
+		n = len / 2;
+	while (stack_size(*stack_a) > 1)
 	{
-		foo(stack_a, stack_b, &i);
-		if(stack_size(*stack_b) > 1)
-		{
-			if ((*stack_a) -> val > last_node(*stack_b) && (*stack_a) -> val < (*stack_b)-> val)
-			{
-				ra_rb(stack_a, 'a');
-				i++;
-				while (last_node(*stack_a) < (*stack_b) -> val)
-				{
-					pa_pb(stack_a, stack_b, 'a');
-					i++;
-				}
-				rra_rrb(stack_a, 'a');
-				i++;
-			}
-			if (list_sorted(*stack_a, 'a') && list_sorted(*stack_b, 'b') && (*stack_a) -> val > (*stack_b) -> val)
-			{
-				break;
-			}
-		}
-		if ((*stack_a) -> val > last_node(*stack_a))
-		{
-			ra_rb(stack_a, 'a');
-			i++;
-		}
-		else
-		{
-			pa_pb(stack_b, stack_a, 'b');
-			i++;
-		}
+		to_stack_b(stack_a, stack_b, found_mite(stack_a, n), n);
 	}
-	while (stack_size(*stack_b))
-	{
-		pa_pb(stack_a, stack_b, 'a');
-		i++;
-	}
-	
-	print_stack(*stack_a, "stack_a");
-	print_stack(*stack_b, "stack_b");
-	printf(" count %d\n", i);
-}
-
-
-/*
-void	sort(t_stack **stack_a, t_stack **stack_b)
-{
-	int i = 0;
-	print_stack(*stack_a, "stack_a");
-	print_stack(*stack_b, "stack_b");
-
-	while (stack_size(*stack_a) > 3)
-	{
-		foo(stack_a, stack_b, &i);
-		if ((*stack_a) -> val > last_node(*stack_a))
-		{
-			ra_rb(stack_a, 'a');
-			i++;
-		}
-		else
-		{
-			pa_pb(stack_b, stack_a, 'b');
-			i++;
-		}
-	}
-	print_stack(*stack_a, "stack_a");
-	print_stack(*stack_b, "stack_b");
-	printf(" count %d\n", i);
-
+	to_stack_a(stack_a, stack_b);
+	pa_pb(stack_a, stack_b, 'a');
+	print_stack(*stack_a, *stack_b);
 	
 }
 
-*/
 void	to_sort(t_stack **stack_a, t_stack **stack_b)
 {
 	if (stack_size(*stack_a) == 3 && !list_sorted(*stack_a, 'a'))
 	{
-		print_stack(*stack_a, "stack_a");
 		while (!list_sorted(*stack_a, 'a'))
 		{
 			if ((*stack_a) -> val > last_node(*stack_a))
@@ -285,36 +132,7 @@ void	to_sort(t_stack **stack_a, t_stack **stack_b)
 			else
 				rra_rrb(stack_a, 'a');
 		}
-		print_stack(*stack_a, "stack_a");
 	}
 	else if (!list_sorted(*stack_a, 'a'))
 		sort(stack_a, stack_b);
-}
-
-int	main(int n, char **s)
-{
-	t_stack		*stack_a;
-	t_stack		*stack_b;
-	int			num;
-	int			i;
-
-	stack_a = NULL;
-	stack_b = NULL;
-	num = 0;
-	i = 1;
-	if (n > 3 && ft_chac_args(s))
-	{
-		while (s[i])
-		{
-			num = ft_atoi(s[i]);
-			if (num == 0 && s[i][1] != '\0')
-				return (printf("error\n"), 0);
-			if (ft_int_valid(stack_a, num))
-				return (free(stack_a), free(stack_b), printf("Error\n"), 0);
-			add_back (&stack_a, create_new_node(num));
-			i++;
-		}
-		to_sort(&stack_a, &stack_b);
-	}
-	return (0);
 }

@@ -25,32 +25,6 @@ void	rrr(t_stack **stack_a, t_stack **stack_b)
 	ft_printf("rrr\n");
 }
 
-void	min_and_max(t_stack *stack)
-{
-	t_stack	*pnt;
-	int		max;
-	int		min;
-
-	pnt = stack;
-	max = pnt -> val;
-	min = pnt -> val;
-	while (pnt)
-	{
-		if (pnt -> val > max)
-			max = pnt -> val;
-		else if (pnt -> val < min)
-			min = pnt -> val;
-		pnt = pnt -> next;
-	}
-	pnt = stack;
-	while (pnt)
-	{
-		pnt -> max = max;
-		pnt -> min = min;
-		pnt = pnt -> next;
-	}
-}
-
 int	last_node(t_stack *stack)
 {
 	t_stack *pnt;
@@ -61,4 +35,48 @@ int	last_node(t_stack *stack)
 		pnt = pnt -> next;
 	}
 	return (pnt -> val);
+}
+
+void	found_doub_op_1(t_stack **stack_a, t_stack **stack_b)
+{
+	if(stack_size(*stack_b) > 1 && stack_size(*stack_a) > 1)
+	{
+		if ((*stack_b) -> val < (*stack_b) -> next -> val)
+		{
+			if ((*stack_a) -> val > (*stack_a) -> next -> val)
+			{
+				ss(stack_a, stack_b);
+			}
+			else
+			{
+				sa_sb(stack_b, 'b');
+			}
+		}
+		else if ((*stack_a) -> val > (*stack_a) -> next -> val)
+		{
+			sa_sb(stack_a, 'a');
+		}
+	}
+}
+
+void	found_doub_op_2(t_stack **stack_a, t_stack **stack_b, int center)
+{
+	if (stack_size(*stack_a) > 2 && stack_size(*stack_b) > 2)
+	{
+		if (rang((*stack_b) -> val, (*stack_b) -> next -> val) > rang((*stack_b) -> val, last_node(*stack_b)))
+		{
+			if (rang((*stack_a) -> val, (*stack_a) -> next -> val) > rang((*stack_a) -> val, last_node(*stack_a)) && (*stack_a) -> val > center)
+			{
+				rr(stack_a, stack_b);
+			}
+			else
+			{
+				ra_rb(stack_b, 'b');
+			}
+		}
+		else if (rang((*stack_a) -> val, (*stack_a) -> next -> val) > rang((*stack_a) -> val, last_node(*stack_a)) && (*stack_a) -> val > center)
+		{
+			ra_rb(stack_a, 'a');
+		}
+	}
 }
