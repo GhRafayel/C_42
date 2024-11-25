@@ -12,47 +12,6 @@
 
 #include "push_swap.h"
 
-void	print_stack(t_stack *stack, t_stack *stack_b)
-{
-	t_stack	*p;
-	t_stack *b;
-
-	p = stack;
-	b = stack_b;
-	char a = '-';
-	printf("stack_a		stack_b\n\n");
-	while (p || b)
-	{
-		if (!p)
-		{
-			printf("<   %c  >	<   %d  >\n", a, b -> val);
-		}
-		else if (!b)
-		{
-			printf("<    %d  >	<   %c  >\n", p -> val, a);
-		}
-		else
-		{
-			printf("<   %d  >	<   %d  >\n", p -> val, b -> val);
-		}
-		if (!p)
-		{
-			b = b -> next;
-		}
-		else if (!b)
-		{
-			p = p -> next;
-		}
-		else
-		{
-			p = p -> next;
-			b = b -> next;
-		}
-		
-	}
-	printf("----------------------------------\n\n");
-}
-
 int	ft_int_valid(t_stack *stack_a, int num)
 {
 	t_stack	*pnt;
@@ -97,8 +56,8 @@ int	ft_chac_args(char **s)
 
 void	sort(t_stack **stack_a, t_stack **stack_b)
 {
-	int len;
-	int n;
+	int	len;
+	int	n;
 
 	n = 2;
 	len = stack_size(*stack_a);
@@ -115,8 +74,6 @@ void	sort(t_stack **stack_a, t_stack **stack_b)
 	}
 	to_stack_a(stack_a, stack_b);
 	pa_pb(stack_a, stack_b, 'a');
-	//print_stack(*stack_a, *stack_b);
-	
 }
 
 void	to_sort(t_stack **stack_a, t_stack **stack_b)
@@ -125,9 +82,9 @@ void	to_sort(t_stack **stack_a, t_stack **stack_b)
 	{
 		while (!list_sorted(*stack_a, 'a'))
 		{
-			if ((*stack_a) -> val > last_node(*stack_a))
+			if ((*stack_a)->val > last_node(*stack_a))
 				ra_rb(stack_a, 'a');
-			else if ((*stack_a) -> val > (*stack_a) -> next -> val)
+			else if ((*stack_a)->val > (*stack_a)->next->val)
 				sa_sb(stack_a, 'a');
 			else
 				rra_rrb(stack_a, 'a');
