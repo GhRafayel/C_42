@@ -25,6 +25,7 @@ int	        ft_atoi(const char *str);
 int	        ft_isdigit(int ch);
 void	print_stack(t_stack *stack, t_stack *stack_b);
 
+
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;
@@ -414,9 +415,12 @@ void	print_stack(t_stack *stack, t_stack *stack_b)
 int rang(int a, int b)
 {
 	int res = a - b;
+
 	if (res < 0)
 		res *= -1;
-	return (res - 1);
+	if (a > b)
+		res -= 1;
+	return (res);
 }
 
 int	last_node(t_stack *stack)
@@ -459,15 +463,13 @@ int	to_mite(t_stack **stack, int les)
 	return (num);
 }
 
-int	fount_biggist(t_stack **stack)
+int	find_biggist(t_stack **stack)
 {
 	int			num;
-	int			i;
 	t_stack		*pnt;
 
 	pnt = (*stack);
 	num = pnt -> val;
-	i = 0;
 	while (pnt)
 	{
 		if(pnt -> val > num)
@@ -476,15 +478,8 @@ int	fount_biggist(t_stack **stack)
 		}
 		pnt = pnt -> next;
 	}
-	pnt = (*stack);
-	while (pnt)
-	{
-		if(pnt -> val == num)
-			break;
-		pnt = pnt -> next;
-		i++;
-	}
-	return (i);
+	
+	return (num);
 }
 
 int	is_biggist(t_stack **stack)
@@ -505,7 +500,7 @@ int	is_biggist(t_stack **stack)
 	return (1);
 }
 
-int les_num(t_stack **stack)
+int smallest_num(t_stack **stack)
 {
 	int	big;
 	int temp;
@@ -525,12 +520,12 @@ int les_num(t_stack **stack)
 	return (big);
 }
 
-int	found_mite(t_stack **stack, int n )
+int	find_mite(t_stack **stack, int n )
 {
 	 int mit;
 	 int j;
 
-	 mit = les_num(stack);
+	 mit = smallest_num(stack);
 	 j = 0;
 	while (n > j)
 	{
@@ -538,6 +533,52 @@ int	found_mite(t_stack **stack, int n )
 		j++;
 	}
 	return (mit);
+}
+
+int find_min_rang(t_stack **stack_a, int b_val, int *num)
+{
+	int			i;
+	int			num2;
+	int			num3;
+	t_stack		*a;
+
+	a = *stack_a;
+	num2 = rang(a -> val, b_val);
+	*num = a -> val;
+	i = 0;
+	while (a)
+	{
+		num3 = rang(a -> val, b_val);
+		if (num2 > num3)
+		{
+			num2 = num3;
+			*num = a->val;
+		}
+		if (num2 == num3)
+		{
+			if (*num > a->val)
+				*num = a->val;
+		}
+		a = a -> next;
+	}
+	return (num2);
+}
+
+int	find_pl(t_stack **stack, int num)
+{
+	int			i;
+	t_stack		*pnt;
+
+	pnt = (*stack);
+	i = 0;
+	while (pnt)
+	{
+		if(pnt -> val == num)
+			break;
+		pnt = pnt -> next;
+		i++;
+	}
+	return (i);
 }
 
 void	found_doub_op_1(t_stack **stack_a, t_stack **stack_b, int *i)
@@ -557,20 +598,17 @@ void	found_doub_op_1(t_stack **stack_a, t_stack **stack_b, int *i)
 				i+=1;
 			}
 		}
-		else if ((*stack_a) -> val > (*stack_a) -> next -> val)
-		{
-			sa_sb(stack_a, 'a');
-				i+=1;
-		}
+		// else if ((*stack_a) -> val > (*stack_a) -> next -> val)
+		// {
+		// 	sa_sb(stack_a, 'a');
+		// 		i+=1;
+		// }
 	}
 }
 
 void	found_doub_op_2(t_stack **stack_a, t_stack **stack_b, int *i, int center)
 {
-	int siz_a = stack_size(*stack_a);
-	int siz_b = stack_size(*stack_b);
-
-	if (siz_b > 2 && siz_a > 2)
+	if (stack_size(*stack_a) > 2 && stack_size(*stack_b) > 2)
 	{
 		if (rang((*stack_b) -> val, (*stack_b) -> next -> val) > rang((*stack_b) -> val, last_node(*stack_b)))
 		{
@@ -622,32 +660,44 @@ void	found_doub_op_3(t_stack **stack_a, t_stack **stack_b, int *i, int center)
 	}
 }
 
-int foo1(t_stack **stack_a, t_stack **stack_b, int center, int n)
+int to_stack_b(t_stack **stack_a, t_stack **stack_b, int center, int n)
 {
 	int i;
 
 	i = 0;
-	while (n && stack_size(*stack_a) > 1)
+	while (n && stack_size(*stack_a) > 2)
 	{
+
+		//print_stack(*stack_a, *stack_b);
+
 		found_doub_op_2(stack_a, stack_b, &i, center);
+
+		//print_stack(*stack_a, *stack_b);
+
 		found_doub_op_1(stack_a, stack_b, &i);
+		//print_stack(*stack_a, *stack_b);
 
 		if ((*stack_a) -> val <= center)
 		{
 			pa_pb(stack_b, stack_a, 'b');
+			//print_stack(*stack_a, *stack_b);
 			i++;
 			n--;
 		}
 		else
 		{
 			ra_rb(stack_a, 'a');
+			//print_stack(*stack_a, *stack_b);
 				i++;
 		}
 	}
+	//print_stack(*stack_a, *stack_b);
+
 	return (i);
 }
 
-int foo2(t_stack **stack_a, t_stack **stack_b)
+/*
+int to_stack_a(t_stack **stack_a, t_stack **stack_b)
 {
 	int i = 0;
 	int s_len = stack_size(*stack_b);
@@ -660,34 +710,121 @@ int foo2(t_stack **stack_a, t_stack **stack_b)
 		}
 		if(!is_biggist(stack_b))
 		{
-			if (fount_biggist(stack_b) > stack_size(*stack_b) / 2)
+			if (find_biggist(stack_b) > stack_size(*stack_b) / 2)
 			{
 				rra_rrb(stack_b, 'b');
 				i++;
-				print_stack(*stack_a, *stack_b);
+				////print_stack(*stack_a, *stack_b);
 				
 			}
 			else
 			{
 				ra_rb(stack_b, 'b');
 				i++;
-				print_stack(*stack_a, *stack_b);
+				////print_stack(*stack_a, *stack_b);
 			}
 		}
 		else
 		{
 			pa_pb(stack_a, stack_b, 'a');
-			print_stack(*stack_a, *stack_b);
+			////print_stack(*stack_a, *stack_b);
 			s_len--;
 			i++;
 		}
 	}
 	return (i);
 }
+*/
+
+void	to_stack_a(t_stack **stack_a, t_stack **stack_b)
+{
+	int num;
+				//print_stack(*stack_a, *stack_b);
+
+	while (stack_size(*stack_b) > 0)
+	{
+		int a = find_min_rang(stack_a, (*stack_b) -> val, &num);
+		int b = find_min_rang(stack_a, last_node(*stack_b), &num);
+
+		if ( a > b)
+		{
+			find_min_rang(stack_a, last_node(*stack_b), &num);
+
+			if (find_pl(stack_a, num) >= stack_size(*stack_a) / 2)
+			{
+				rrr(stack_a, stack_b);
+				//print_stack(*stack_a, *stack_b);
+
+			}
+			else
+			{
+				rra_rrb(stack_b, 'b');
+				//print_stack(*stack_a, *stack_b);
+			
+			}
+			//pa_pb(stack_a, stack_b, 'a');
+		}
+		else
+		{
+			find_min_rang(stack_a, (*stack_b) -> val, &num);
+			if (num != (*stack_a) -> val && (*stack_b) -> val != num)
+			{
+				if (find_pl(stack_a, num) <= stack_size(*stack_a) / 2)
+				{
+					if ((*stack_b) -> val < num)
+					{
+						while (last_node(*stack_a) != num)
+						{
+							ra_rb(stack_a, 'a');
+							//print_stack(*stack_a, *stack_b);
+						}
+					}
+					else
+					{
+						while ((*stack_a) -> val != num)
+						{
+							ra_rb(stack_a, 'a');
+							//print_stack(*stack_a, *stack_b);
+						}
+					}
+					
+				}
+				else
+				{
+					if ((*stack_b)-> val < num )
+					{
+						while (last_node(*stack_a) != num )
+						{
+							rra_rrb(stack_a, 'a');
+						}
+						if (num == find_biggist(stack_a))
+						{
+							rra_rrb(stack_a, 'a');
+						}
+					}
+					else
+					{
+						while ((*stack_a) -> val != num)
+						{
+							rra_rrb(stack_a, 'a');
+							//print_stack(*stack_a, *stack_b);
+						}
+					}
+				}
+
+			}
+			pa_pb(stack_a, stack_b, 'a');
+		}
+			
+		//print_stack(*stack_a, *stack_b);
+
+	}
+}
 
 void	sort(t_stack **stack_a, t_stack **stack_b)
 {
 	int len;
+	int big;
 	int i;
 	int n;
 	i = 0;
@@ -696,15 +833,30 @@ void	sort(t_stack **stack_a, t_stack **stack_b)
 	n = len / 5;
 	if (len >= 500)
 		n = len / 7;
-	while (stack_size(*stack_a) > 1)
+	while (stack_size(*stack_a) > 2)
 	{
-		i += foo1(stack_a, stack_b, found_mite(stack_a, n), n);
+		i += to_stack_b(stack_a, stack_b, find_mite(stack_a, n), n);
 	}
-	//i += foo2(stack_a, stack_b);
-	pa_pb(stack_a, stack_b, 'a');
-	print_stack(*stack_a, *stack_b);
-	printf(" count %d\n", i + 1);
+
+	to_stack_a(stack_a, stack_b);
+
+	big =  find_biggist(stack_a);
+
+	while (last_node(*stack_a) != big)
+	{
+		if (find_pl(stack_a, big) < len / 2)
+		{
+			ra_rb(stack_a, 'a');
+		}
+		else
+		{
+			rra_rrb(stack_a, 'a');
+			
+		}
 	}
+	//print_stack(*stack_a, *stack_b);
+	//printf(" count %d\n", i + 1);
+}
 
 void	to_sort(t_stack **stack_a, t_stack **stack_b)
 {
@@ -771,16 +923,16 @@ int	main(int nn, char **ss)
 
 	int n = 2;
 	// 50
-	//char *s[2] = {"name", "515 694 28 695 396 14 609 11 709 591 330 848 779 248 402 978 339 249 190 202 840 114 61 719 643 221 618 397 565 774 407 288 191 493 340 859 73 545 421 64 426 199 825 356 2 80 718 856 436 775"};
+	//char *s[2] = {"name", "25 36 2 15 26 19 43 28 40 33 10 29 21 16 47 49 44 4 48 11 31 45 41 23 38 8 37 9 35 22 32 20 13 46 30 27 5 42 1 34 7 14 12 18 24 50 17 3 39 6"};
 	// 50
 	//char *s[2] = {"name", "38 46 6 10 44 3 1 25 5 26 9 12 20 50 17 47 42 49 29 48 35 28 16 21 14 2 40 13 41 11 4 37 36 8 39 18 7 27 24 34 23 22 32 31 33 45 19 43 30 15"};
 	//100
 	//char *s[2] = {"name", " 520 798 535 830 418 491 293 539 516 541 39 902 597 955 776 93 325 346 569 901 550 182 29 666 771 34 284 845 245 315 797 291 615 607 350 301 188 393 316 857 696 163 142 888 907 490 243 950 36 119 770 694 152 719 486 274 86 381 307 364 237 611 462 908 992 103 858 408 778 154 764 851 925 445 347 859 681 949 52 205 502 635 575 866 718 686 675 53 732 821 328 456 10 416 722 932 324 874 426 352"};
 	//char *s[2] = {"name", " 98 -18 87 40 50 -38 2 65 4 -71 -31 92 -9 -81 21 84 1 11 -90 78 25 42 -56 62 -39 85 52 -93 37 -94 96 -50 -86 -63 -95 -2 -57 34 32 66 41 15 -51 64 -49 72 88 59 -8 99 80 -22 47 95 69 -92 -13 3 35 -41 73 17 -58 10 -52 27 97 31 60 28 -83 -20 -68 -1 79 75 22 89 -69 -19 -24 83 -75 -96 -34 -25 -80 -59 -77 -36 57 82 38 18 -27 -12 -60 5 14 33"};
 	// 100
-	//char *s[2] = {"name", " 20 53 49 24 10 99 39 83 41 58 92 68 93 97 7 96 45 22 86 85 87 98 32 30 63 60 61 9 89 81 69 8 50 21 27 59 84 95 5 14 90 57 40 3 4 82 2 44 6 33 52 55 91 56 79 35 72 31 18 13 70 80 48 88 42 47 65 64 51 78 26 34 94 36 46 19 38 25 12 28 37 77 100 62 76 11 43 73 74 67 17 54 1 66 29 71 15 23 75 16"};
+	char *s[2] = {"name", " 29 15 82 70 44 12 63 69 24 84 76 43 60 80 11 93 98 25 56 17 64 92 18 51 99 38 19 75 26 23 73 2 6 45 90 31 68 52 77 74 32 41 62 54 13 89 91 59 35 10 8 67 27 57 5 9 30 53 37 65 28 96 83 87 46 40 33 61 66 78 3 4 81 1 20 94 88 7 86 39 97 14 58 100 55 34 71 47 48 16 42 49 72 50 36 22 85 79 21 95"};
 	// 500
-	char *s[2] = {"name", " 48 374 329 255 464 470 139 462 348 258 261 285 1 448 500 488 160 305 79 442 128 310 177 235 386 469 418 472 118 186 7 219 420 431 484 269 230 253 314 104 125 363 157 215 440 145 421 155 92 75 391 313 434 66 244 73 334 282 212 202 120 371 328 456 445 430 74 146 251 354 173 54 223 227 55 148 229 149 188 184 30 326 224 491 249 267 276 379 446 195 182 260 187 44 350 37 427 152 90 17 358 486 325 299 444 268 113 33 214 26 319 412 78 138 53 96 124 89 479 302 408 284 409 473 107 298 190 23 492 466 192 264 199 336 106 312 480 97 388 88 198 169 375 300 324 112 232 315 435 352 3 165 175 356 303 364 210 216 438 211 225 94 87 458 72 218 309 115 404 341 366 207 68 65 12 392 414 162 27 130 39 263 376 459 335 80 361 221 110 19 9 372 400 147 277 21 482 317 259 321 494 183 123 461 57 67 83 208 405 242 327 2 452 330 93 28 14 396 233 122 307 105 111 387 45 209 429 443 339 135 389 398 407 489 301 415 10 129 422 220 347 154 416 20 178 81 271 410 487 121 294 426 29 250 161 394 266 85 287 38 98 15 84 151 485 246 59 46 240 43 108 402 370 275 380 278 62 403 468 167 477 238 136 495 150 201 467 13 174 323 159 453 355 181 248 357 308 6 460 292 158 126 95 204 481 114 236 295 423 318 116 322 385 206 413 498 252 18 497 56 86 51 393 205 411 153 109 134 270 197 237 306 281 70 127 390 141 156 166 441 383 406 176 359 194 377 286 180 36 351 365 265 360 99 247 425 142 239 463 189 450 213 337 144 476 490 320 274 101 254 163 449 226 69 31 191 77 171 279 293 179 296 289 140 193 76 11 471 436 133 256 273 50 369 102 419 137 367 433 4 25 333 231 34 381 8 397 203 311 228 316 170 342 344 475 119 103 100 40 362 63 117 496 16 82 234 332 447 291 49 283 71 5 353 290 61 143 24 349 164 499 346 343 457 222 465 493 42 35 131 373 382 474 483 132 185 428 217 243 257 288 280 60 297 262 32 91 401 58 41 47 417 22 345 439 432 241 200 454 64 384 52 340 368 478 272 168 455 331 399 196 378 338 437 304 424 172 395 "};
+	//char *s[2] = {"name", " 48 374 329 255 464 470 139 462 348 258 261 285 1 448 500 488 160 305 79 442 128 310 177 235 386 469 418 472 118 186 7 219 420 431 484 269 230 253 314 104 125 363 157 215 440 145 421 155 92 75 391 313 434 66 244 73 334 282 212 202 120 371 328 456 445 430 74 146 251 354 173 54 223 227 55 148 229 149 188 184 30 326 224 491 249 267 276 379 446 195 182 260 187 44 350 37 427 152 90 17 358 486 325 299 444 268 113 33 214 26 319 412 78 138 53 96 124 89 479 302 408 284 409 473 107 298 190 23 492 466 192 264 199 336 106 312 480 97 388 88 198 169 375 300 324 112 232 315 435 352 3 165 175 356 303 364 210 216 438 211 225 94 87 458 72 218 309 115 404 341 366 207 68 65 12 392 414 162 27 130 39 263 376 459 335 80 361 221 110 19 9 372 400 147 277 21 482 317 259 321 494 183 123 461 57 67 83 208 405 242 327 2 452 330 93 28 14 396 233 122 307 105 111 387 45 209 429 443 339 135 389 398 407 489 301 415 10 129 422 220 347 154 416 20 178 81 271 410 487 121 294 426 29 250 161 394 266 85 287 38 98 15 84 151 485 246 59 46 240 43 108 402 370 275 380 278 62 403 468 167 477 238 136 495 150 201 467 13 174 323 159 453 355 181 248 357 308 6 460 292 158 126 95 204 481 114 236 295 423 318 116 322 385 206 413 498 252 18 497 56 86 51 393 205 411 153 109 134 270 197 237 306 281 70 127 390 141 156 166 441 383 406 176 359 194 377 286 180 36 351 365 265 360 99 247 425 142 239 463 189 450 213 337 144 476 490 320 274 101 254 163 449 226 69 31 191 77 171 279 293 179 296 289 140 193 76 11 471 436 133 256 273 50 369 102 419 137 367 433 4 25 333 231 34 381 8 397 203 311 228 316 170 342 344 475 119 103 100 40 362 63 117 496 16 82 234 332 447 291 49 283 71 5 353 290 61 143 24 349 164 499 346 343 457 222 465 493 42 35 131 373 382 474 483 132 185 428 217 243 257 288 280 60 297 262 32 91 401 58 41 47 417 22 345 439 432 241 200 454 64 384 52 340 368 478 272 168 455 331 399 196 378 338 437 304 424 172 395 "};
 	str = ft_check_args(s, &i, n);
 	if (n > 1 && str)
 	{

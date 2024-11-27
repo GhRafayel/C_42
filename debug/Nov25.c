@@ -25,7 +25,6 @@ int	        ft_atoi(const char *str);
 int	        ft_isdigit(int ch);
 void	print_stack(t_stack *stack, t_stack *stack_b);
 
-
 size_t	ft_strlen(const char *s)
 {
 	size_t	len;
@@ -415,9 +414,12 @@ void	print_stack(t_stack *stack, t_stack *stack_b)
 int rang(int a, int b)
 {
 	int res = a - b;
+
 	if (res < 0)
 		res *= -1;
-	return (res - 1);
+	if (a > b)
+		res -= 1;
+	return (res);
 }
 
 int	last_node(t_stack *stack)
@@ -460,24 +462,13 @@ int	to_mite(t_stack **stack, int les)
 	return (num);
 }
 
-int	fount_biggist(t_stack **stack)
+int	find_pl(t_stack **stack, int num)
 {
-	int			num;
 	int			i;
 	t_stack		*pnt;
 
 	pnt = (*stack);
-	num = pnt -> val;
 	i = 0;
-	while (pnt)
-	{
-		if(pnt -> val > num)
-		{
-			num = pnt -> val;
-		}
-		pnt = pnt -> next;
-	}
-	pnt = (*stack);
 	while (pnt)
 	{
 		if(pnt -> val == num)
@@ -486,6 +477,29 @@ int	fount_biggist(t_stack **stack)
 		i++;
 	}
 	return (i);
+}
+
+int	find_smallest_num(t_stack **stack)
+{
+ 
+}
+
+int find_biggist_num(t_stack **stack)
+{
+	int			num;
+	t_stack		*pnt;
+
+	pnt = (*stack);
+	num = pnt -> val;
+	while (pnt)
+	{
+		if(pnt -> val < num)
+		{
+			num = pnt -> val;
+		}
+		pnt = pnt -> next;
+	}
+	return (num);
 }
 
 int	is_biggist(t_stack **stack)
@@ -526,7 +540,7 @@ int les_num(t_stack **stack)
 	return (big);
 }
 
-int	found_mite(t_stack **stack, int n )
+int	find_mite(t_stack **stack, int n )
 {
 	 int mit;
 	 int j;
@@ -541,7 +555,8 @@ int	found_mite(t_stack **stack, int n )
 	return (mit);
 }
 
-void	found_doub_op_1(t_stack **stack_a, t_stack **stack_b, int *i)
+/*
+void	find_doub_op_1(t_stack **stack_a, t_stack **stack_b, int *i)
 {
 	if(stack_size(*stack_b) > 1 && stack_size(*stack_a) > 1)
 	{
@@ -566,9 +581,12 @@ void	found_doub_op_1(t_stack **stack_a, t_stack **stack_b, int *i)
 	}
 }
 
-void	found_doub_op_2(t_stack **stack_a, t_stack **stack_b, int *i, int center)
+void	find_doub_op_2(t_stack **stack_a, t_stack **stack_b, int *i, int center)
 {
-	if (stack_size(*stack_a) > 2 && stack_size(*stack_b) > 2)
+	int siz_a = stack_size(*stack_a);
+	int siz_b = stack_size(*stack_b);
+
+	if (siz_b > 2 && siz_a > 2)
 	{
 		if (rang((*stack_b) -> val, (*stack_b) -> next -> val) > rang((*stack_b) -> val, last_node(*stack_b)))
 		{
@@ -591,7 +609,7 @@ void	found_doub_op_2(t_stack **stack_a, t_stack **stack_b, int *i, int center)
 	}
 }
 
-void	found_doub_op_3(t_stack **stack_a, t_stack **stack_b, int *i, int center)
+void	find_doub_op_3(t_stack **stack_a, t_stack **stack_b, int *i, int center)
 {
 	if (stack_size(*stack_a) > 2 && stack_size(*stack_b) > 2)
 	{
@@ -627,8 +645,8 @@ int foo1(t_stack **stack_a, t_stack **stack_b, int center, int n)
 	i = 0;
 	while (n && stack_size(*stack_a) > 1)
 	{
-		found_doub_op_2(stack_a, stack_b, &i, center);
-		found_doub_op_1(stack_a, stack_b, &i);
+		find_doub_op_2(stack_a, stack_b, &i, center);
+		find_doub_op_1(stack_a, stack_b, &i);
 
 		if ((*stack_a) -> val <= center)
 		{
@@ -682,25 +700,99 @@ int foo2(t_stack **stack_a, t_stack **stack_b)
 	}
 	return (i);
 }
+*/
+
+int find_min_rang(t_stack **stack_a, t_stack **stack_b, int *num, int *n)
+{
+	print_stack(*stack_a, *stack_b);
+	int			i;
+	int 		num1;
+	int			num2;
+	int			num3;
+	t_stack		*b;
+
+	b = *stack_b;
+	num1 = rang((*stack_a) -> val, last_node((*stack_a)));
+	num2 = rang(b -> val, (*stack_a) -> val);
+	*num = b -> val;
+	i = 0;
+	while (b)
+	{
+		num3 = rang(b -> val, (*stack_a) -> val);
+		if (num2 > num3)
+		{
+			num2 = num3;
+			*num = b -> val;
+		}
+		b = b -> next;
+	}
+	if (num1 < num2)
+	{
+		ra_rb(stack_a, 'a');
+		*n +=1;
+		*num = (*stack_a)->val;
+		return(1);
+	}
+	return (0);
+}
 
 void	sort(t_stack **stack_a, t_stack **stack_b)
 {
-	int len;
-	int i;
-	int n;
-	i = 0;
-	n = 2;
-	len = stack_size(*stack_a);
-	n = len / 5;
-	if (len >= 500)
-		n = len / 7;
+	int num;
+	int i = 0;
+	while (i < 2)
+	{
+		pa_pb(stack_b, stack_a, 'b');
+		print_stack(*stack_a, *stack_b);
+		i++;
+	}
+	pa_pb(stack_b, stack_a, 'b');
+
 	while (stack_size(*stack_a) > 1)
 	{
-		i += foo1(stack_a, stack_b, found_mite(stack_a, n), n);
+		print_stack(*stack_a, *stack_b);
+
+		pa_pb(stack_b, stack_a, 'b');
+		i++;
+	print_stack(*stack_a, *stack_b);
+		while(find_min_rang(stack_a, stack_b, &num, &i));
+		
+		print_stack(*stack_a, *stack_b);
+		if (num != (*stack_a) -> val && (*stack_b) -> val != num)
+		{
+			if (find_pl(stack_b, num) <= stack_size(*stack_b) / 2)
+			{
+				while ((*stack_b) -> val != num)
+				{
+
+					ra_rb(stack_b, 'b');
+					print_stack(*stack_a, *stack_b);
+					i++;
+				}
+				if ((*stack_b) -> val > (*stack_a) -> val)
+				{
+					ra_rb(stack_b, 'b');
+					print_stack(*stack_a, *stack_b);
+					i++;
+				}
+			}
+			else
+			{
+				while ((*stack_b) -> val != num)
+				{
+					rra_rrb(stack_b, 'b');
+					print_stack(*stack_a, *stack_b);
+					i++;
+				}
+				if ((*stack_a) -> val > last_node(*stack_b))
+				{
+					ra_rb(stack_b, 'b');
+					print_stack(*stack_a, *stack_b);
+					i++;
+				}
+			}
+		}
 	}
-	i += foo2(stack_a, stack_b);
-	pa_pb(stack_a, stack_b, 'a');
-	printf(" count %d\n", i + 1);
 }
 
 void	to_sort(t_stack **stack_a, t_stack **stack_b)
@@ -767,8 +859,9 @@ int	main(int nn, char **ss)
 	i = 1;
 
 	int n = 2;
-	// 50
-	char *s[2] = {"name", "515 694 28 695 396 14 609 11 709 591 330 848 779 248 402 978 339 249 190 202 840 114 61 719 643 221 618 397 565 774 407 288 191 493 340 859 73 545 421 64 426 199 825 356 2 80 718 856 436 775"};
+	//char *s[2] = {"name", "5 18 3 2 11 49 31 48 17 40 8 22 26 45 50 43 36 7 37 35 23 13 34 33 15 25 6 42 1 21 44 4 20 38 30 19 24 16 39 47 9 27 10 14 32 28 46 12 41 29"};
+	char *s[2] = {"name", "25 36 2 15 26 19 43 28 40 33 10 29 21 16 47 49 44 4 48 11 31 45 41 23 38 8 37 9 35 22 32 20 13 46 30 27 5 42 1 34 7 14 12 18 24 50 17 3 39 6"};
+	//char *s[2] = {"name", "515 694 28 695 396 14 609 11 709 591 330 848 779 248 402 978 339 249 190 202 840 114 61 719 643 221 618 397 565 774 407 288 191 493 340 859 73 545 421 64 426 199 825 356 2 80 718 856 436 775"};
 	// 50
 	//char *s[2] = {"name", "38 46 6 10 44 3 1 25 5 26 9 12 20 50 17 47 42 49 29 48 35 28 16 21 14 2 40 13 41 11 4 37 36 8 39 18 7 27 24 34 23 22 32 31 33 45 19 43 30 15"};
 	//100
@@ -795,3 +888,6 @@ int	main(int nn, char **ss)
 	}
 	return (0);
 }
+
+
+
