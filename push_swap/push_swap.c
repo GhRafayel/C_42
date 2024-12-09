@@ -1,138 +1,96 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rghazary <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 12:47:29 by rghazary          #+#    #+#             */
-/*   Updated: 2024/10/30 12:47:31 by rghazary         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "push_swap.h"
 
-void	print_stack(t_stack *stack, t_stack *stack_b)
+void	min_on_top(t_stack **stack) 
 {
-	t_stack	*p;
-	t_stack *b;
-
-	p = stack;
-	b = stack_b;
-	char a = '-';
-	printf("stack_a		stack_b\n\n");
-	while (p || b)
+	while ((*stack)->val != find_min(*stack)->val)
 	{
-		if (!p)
-		{
-			printf("<   %c  >	<   %d  >\n", a, b -> val);
-		}
-		else if (!b)
-		{
-			printf("<    %d  >	<   %c  >\n", p -> val, a);
-		}
+		if (find_min(*stack)->position)
+			ra_rb(stack, 'a');
 		else
-		{
-			printf("<   %d  >	<   %d  >\n", p -> val, b -> val);
-		}
-		if (!p)
-		{
-			b = b -> next;
-		}
-		else if (!b)
-		{
-			p = p -> next;
-		}
-		else
-		{
-			p = p -> next;
-			b = b -> next;
-		}
-		
+			rra_rrb(stack, 'a');
 	}
-	printf("----------------------------------\n\n");
 }
 
-int	ft_int_valid(t_stack *stack_a, int num)
+void	prep_for_push(t_stack **stack, t_stack *top_node, char ch)
 {
-	t_stack	*pnt;
+	while (*stack != top_node)
+	{
+		if (ch == 'a')
+		{
+			if (top_node->position)
+				ra_rb(stack, ch);
+			else
+				rra_rrb(stack, ch);
+		}
+		else if (ch == 'b')
+		{
+			if (top_node->position)
+				ra_rb(stack, ch);
+			else
+				rra_rrb(stack, ch);
+		}	
+	}
+}
 
-	pnt = stack_a;
+int	to_mite(t_stack **stack, int les)
+{
+	int			num;
+	int			tru;
+	int			temp;
+	t_stack		*pnt;
+	
+	pnt = (*stack);
+	num = les;
+	tru = 1;
 	while (pnt)
 	{
-		if (pnt -> val == num)
+		if (pnt -> val > les && tru)
 		{
-			return (1);
+			num = pnt -> val;
+			tru = 0;
+		}
+		else  if (pnt -> val > les)
+		{
+			temp = pnt -> val;
+			if (temp < num)
+				num = temp;
 		}
 		pnt = pnt -> next;
 	}
-	return (0);
+	return (num);
 }
 
-int	ft_chac_args(char **s)
+int smallest_num(t_stack **stack)
 {
-	int	i;
-	int	j;
+	int	big;
+	int temp;
+	t_stack		*pnt;
 
-	i = 1;
-	j = 0;
-	while (s[i])
+	pnt = (*stack);
+	big = pnt -> val;
+	while (pnt -> next)
 	{
-		j = 0;
-		if (s[i][j] == '-')
-			j++;
-		while (s[i][j])
+		temp = pnt -> next -> val;
+		if (temp < big)
 		{
-			if (!(s[i][j] >= '0' && s[i][j] <= '9'))
-			{
-				printf("error ft_chac_args");
-				return (0);
-			}
-			j++;
+			big = temp;
 		}
-		i++;
+		pnt = pnt -> next;
 	}
-	return (1);
+	return (big);
 }
 
-void	sort(t_stack **stack_a, t_stack **stack_b)
+int	find_mite(t_stack **stack, int n )
 {
-	int len;
-	int n;
+	 int mit;
+	 int j;
 
-	n = 2;
-	len = stack_size(*stack_a);
-	n = len / 5;
-	if (len > 250 && len <= 500)
-		n = len / 7;
-	if (len > 100 && len <= 250)
-		n = len / 6;
-	if (len < 20)
-		n = len / 2;
-	while (stack_size(*stack_a) > 1)
+	 mit = smallest_num(stack);
+	 j = 1;
+	while (n > j)
 	{
-		to_stack_b(stack_a, stack_b, found_mite(stack_a, n), n);
+		mit = to_mite(stack, mit);
+		j++;
 	}
-	to_stack_a(stack_a, stack_b);
-	pa_pb(stack_a, stack_b, 'a');
-	//print_stack(*stack_a, *stack_b);
-	
-}
-
-void	to_sort(t_stack **stack_a, t_stack **stack_b)
-{
-	if (stack_size(*stack_a) == 3 && !list_sorted(*stack_a, 'a'))
-	{
-		while (!list_sorted(*stack_a, 'a'))
-		{
-			if ((*stack_a) -> val > last_node(*stack_a))
-				ra_rb(stack_a, 'a');
-			else if ((*stack_a) -> val > (*stack_a) -> next -> val)
-				sa_sb(stack_a, 'a');
-			else
-				rra_rrb(stack_a, 'a');
-		}
-	}
-	else if (!list_sorted(*stack_a, 'a'))
-		sort(stack_a, stack_b);
+	return (mit);
 }

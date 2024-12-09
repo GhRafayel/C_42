@@ -764,7 +764,6 @@ void	sort(t_stack **stack_a, t_stack **stack_b)
 			{
 				while ((*stack_b) -> val != num)
 				{
-
 					ra_rb(stack_b, 'b');
 					print_stack(*stack_a, *stack_b);
 					i++;

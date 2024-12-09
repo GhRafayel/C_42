@@ -1,82 +1,58 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   sort_ruls2.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rghazary <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 16:51:57 by rghazary          #+#    #+#             */
-/*   Updated: 2024/11/11 16:52:01 by rghazary         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 #include "push_swap.h"
 
-void	rr(t_stack **stack_a, t_stack **stack_b)
+void	ra_rb(t_stack **stack, char str)
 {
-	ra_rb(stack_a, 'r');
-	ra_rb(stack_b, 'r');
-	ft_printf("rr\n");
-}
+	t_stack	*start;
 
-void	rrr(t_stack **stack_a, t_stack **stack_b)
-{
-	rra_rrb(stack_a, 'r');
-	rra_rrb(stack_b, 'r');
-	ft_printf("rrr\n");
-}
-
-int	last_node(t_stack *stack)
-{
-	t_stack *pnt;
-
-	pnt = stack;
-	while (pnt -> next)
+	if (*stack)
 	{
-		pnt = pnt -> next;
-	}
-	return (pnt -> val);
-}
-
-void	found_doub_op_1(t_stack **stack_a, t_stack **stack_b)
-{
-	if(stack_size(*stack_b) > 1 && stack_size(*stack_a) > 1)
-	{
-		if ((*stack_b) -> val < (*stack_b) -> next -> val)
-		{
-			if ((*stack_a) -> val > (*stack_a) -> next -> val)
-			{
-				ss(stack_a, stack_b);
-			}
-			else
-			{
-				sa_sb(stack_b, 'b');
-			}
-		}
-		else if ((*stack_a) -> val > (*stack_a) -> next -> val)
-		{
-			sa_sb(stack_a, 'a');
-		}
+		start = (*stack);
+		(*stack) = start -> next;
+		start -> next = (*stack);
+		add_back(stack, start);
+		if (str == 'a')
+			printf("ra\n");
+		else if (str == 'b')
+			printf("rb\n");
 	}
 }
 
-void	found_doub_op_2(t_stack **stack_a, t_stack **stack_b, int center)
+void	rra_rrb(t_stack **stack, char str)
 {
-	if (stack_size(*stack_a) > 2 && stack_size(*stack_b) > 2)
+	t_stack	*pnt;
+	t_stack	*last;
+
+	pnt = *stack;
+	if (*stack && (*stack)-> next)
 	{
-		if (rang((*stack_b) -> val, (*stack_b) -> next -> val) > rang((*stack_b) -> val, last_node(*stack_b)))
+		while (pnt -> next -> next)
 		{
-			if (rang((*stack_a) -> val, (*stack_a) -> next -> val) > rang((*stack_a) -> val, last_node(*stack_a)) && (*stack_a) -> val > center)
-			{
-				rr(stack_a, stack_b);
-			}
-			else
-			{
-				ra_rb(stack_b, 'b');
-			}
+			pnt = pnt -> next;
 		}
-		else if (rang((*stack_a) -> val, (*stack_a) -> next -> val) > rang((*stack_a) -> val, last_node(*stack_a)) && (*stack_a) -> val > center)
-		{
-			ra_rb(stack_a, 'a');
-		}
+		last = pnt -> next;
+		pnt -> next = NULL;
+		last -> next = *stack;
+		*stack = last;
+		if (str == 'a')
+			printf("rra\n");
+		else if (str == 'b')
+			printf("rrb\n");
 	}
 }
+
+void	find_rr(t_stack **a, t_stack **b, t_stack *cheapest_node)
+{
+	while (*b != cheapest_node->target_node && *a != cheapest_node)
+		rr(a, b);
+	put_indexs(*a);
+	put_indexs(*b);
+}
+
+void	find_rrr(t_stack **a, t_stack **b, t_stack *cheapest_node)
+{
+	while (*b != cheapest_node->target_node && *a != cheapest_node)
+		rrr(a, b); 
+	put_indexs(*a);
+	put_indexs(*b);
+}
+

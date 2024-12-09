@@ -9,8 +9,8 @@
 #    Updated: 2024/10/30 12:39:27 by rghazary         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-SRCS = push_swap.c  sort_ruls_1.c sort_ruls_2.c push_swap_utils_1.c main.c push_swap_utils_2.c
 
+SRCS = push_swap.c main.c push_swap_utils.c sort_ruls_1.c sort_ruls_2.c sort_fun_1.c sort_fun_2.c  stack_fun.c
 
 CFLAGS = -Wall -Wextra -Werror
 CC = cc
