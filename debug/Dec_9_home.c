@@ -804,9 +804,8 @@ char	**check_digit(char **str, int tru)
 	int	i;
 	int j;
 
-	if (tru)
-		i = 0;
-	else
+	i = 0;
+	if (!tru)
 		i = 1;
 	while (str[i])
 	{
@@ -839,6 +838,8 @@ char	**ft_check_args(char **s, int n, char **str)
 	else
 	{
 		str = check_digit(s, 0);
+		if (str)
+			str++;
 	}
 	return (str);
 }
@@ -861,25 +862,26 @@ void	to_sort(t_stack *stack_a, t_stack *stack_b)
 	free_stack(stack_b);
 }
 
-int	main(int nn, char **ss)
+int	main(int n, char **s)
 {
-	(void)nn;
-	(void)ss;
+	// (void)nn;
+	// (void)ss;
 	t_stack		*stack_a;
 	t_stack		*stack_b;
 	char		**str;
 	int			num;
 	int			i;
-	int			n;
+	//int			n;
 
 	stack_a = NULL;
 	stack_b = NULL;
 	str = NULL;
 	num = 0;
 	i = 0;
-	n = 0;
-	char *s[6] = {"name", "5", "4", "0", "22", "77e"};
-	n = 6;
+	//n = 0;
+	// char *s[7] = {"name", "5", "4", "0", "22", "77", NULL};
+	
+	// n = 7;
 	str = ft_check_args(s, n, str);
 	if (str && str[0])
 	{
@@ -894,6 +896,8 @@ int	main(int nn, char **ss)
 			i++;
 		}
 		to_sort(stack_a, stack_b);
+		if (n == 2)
+			free_str(str);
 	}
 	else
 		printf("Error\n");
