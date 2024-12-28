@@ -9,6 +9,8 @@
 /*   Updated: 2024/10/30 13:29:08 by rghazary         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#ifndef PUSH_SWAP_H
+#define PUSH_SWAP_H
 
 #include "../libft/libft.h"
 #include "../ft_printf/ft_printf.h"
@@ -58,3 +60,5 @@ void		rr(t_stack **stack_a, t_stack **stack_b);
 
 void		rra_rrb(t_stack **stack, char str);
 void		rrr(t_stack **stack, t_stack **stack_b);
+
+#endif

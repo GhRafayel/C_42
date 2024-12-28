@@ -60,7 +60,7 @@ char	*ft_strdup(char **dest, char **src)
 	return (*dest);
 }
 
-char	*ft_str_join(char **str1, char **str2, ssize_t *count, int *ss)
+char	*ft_str_join(char **str1, char **str2, ssize_t *count)
 {
 	char	*temp;
 	size_t	len;
@@ -70,8 +70,6 @@ char	*ft_str_join(char **str1, char **str2, ssize_t *count, int *ss)
 	temp = NULL;
 	if (ft_str_chr(*str2) >= 0)
 		*count = 0;
-	else if (*ss * 2 < 2147483647)
-		*ss *= 2;
 	if (*str1 == NULL)
 		return (ft_strdup(&*str1, &*str2));
 	len = ft_strlen(*str1) + ft_strlen(*str2) + 1;

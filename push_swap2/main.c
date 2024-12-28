@@ -28,7 +28,6 @@ void	to_stack_b(t_stack **stack_a, t_stack **stack_b, int center, int n)
 	{
 		found_doub_op_2(stack_a, stack_b, center);
 		found_doub_op_1(stack_a, stack_b);
-		//foo(stack_a, stack_b, &n);
 		if ((*stack_a)->val <= center)
 		{
 			pa_pb(stack_b, stack_a, 'b');
